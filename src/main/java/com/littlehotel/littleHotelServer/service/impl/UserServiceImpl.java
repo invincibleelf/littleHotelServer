@@ -33,11 +33,18 @@ public class UserServiceImpl implements UserService {
 		
 		return userRepository.getOne(id);
 	}
+	
+	@Override
+	public User getUserByUsername(String username) {
+		return userRepository.findByUsername(username);
+	}
 
 	@Override
 	public void deleteUserById(Long id) {
 		userRepository.deleteById(id);
 	}
+
+	
 
 
 }

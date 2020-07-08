@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,7 @@ import com.littlehotel.littleHotelServer.service.UserService;
 @RestController
 @RequestMapping(value = "/api")
 public class UserController {
-	
+
 	private static final Logger logger = LogManager.getLogger(UserController.class);
 
 	@Autowired
@@ -42,11 +43,16 @@ public class UserController {
 
 		return userService.getUserById(id);
 	}
+	
+	@GetMapping(value = "/users/getUser", produces = "application/json")
+	public User getUser(@Param("username") String username) {
+		return userService.getUserByUsername(username);
+	}
 
 	@DeleteMapping(value = "/users/{id}", produces = "application/json")
 	public void deleteUser(@PathVariable Long id) {
 		userService.deleteUserById(id);
-		
+
 	}
 
 }

@@ -11,6 +11,8 @@ public interface UserService {
 	
 	public User getUserById(Long id);
 	
+	public User getUserByUsername(String username);
+	
 	public void deleteUserById(Long id);
 
 }
