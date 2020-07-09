@@ -1,18 +1,25 @@
 package com.littlehotel.littleHotelServer.service;
 
 import java.util.List;
-import com.littlehotel.littleHotelServer.entity.User;
 
+import org.springframework.stereotype.Service;
+
+import com.littlehotel.littleHotelServer.entity.ApplicationUser;
+
+/*
+ * @author Sharad Shrestha
+ * Interface to handle methods for User Related Operations
+ * 
+ */
 public interface UserService {
 
-	public User createUser(User user);
 
-	public List<User> getUsers();
+	public List<ApplicationUser> getUsers();
 	
-	public User getUserById(Long id);
-	
-	public User getUserByUsername(String username);
+	public ApplicationUser getUserById(Long id);
 	
 	public void deleteUserById(Long id);
+	
+	public Boolean checkUserExists(String username);
 
 }
