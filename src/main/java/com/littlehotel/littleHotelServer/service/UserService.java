@@ -16,5 +16,7 @@ public interface UserService {
 	public ApplicationUser getUserById(Long id);
 	
 	public void deleteUserById(Long id);
+	
+	public Boolean checkUserExists(String username);
 
 }

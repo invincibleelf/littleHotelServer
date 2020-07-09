@@ -1,5 +1,7 @@
 package com.littlehotel.littleHotelServer.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,10 @@ import com.littlehotel.littleHotelServer.configuration.AuthTokenUtil;
 import com.littlehotel.littleHotelServer.model.ApplicationUserDTO;
 import com.littlehotel.littleHotelServer.model.JWTRequest;
 import com.littlehotel.littleHotelServer.model.JWTResponse;
+import com.littlehotel.littleHotelServer.model.MessageResponse;
+import com.littlehotel.littleHotelServer.service.UserService;
 import com.littlehotel.littleHotelServer.service.impl.UserDetailsServiceImpl;
+import com.littlehotel.littleHotelServer.service.impl.UserServiceImpl;
 
 /*
  * @author Sharad Shrestha
@@ -27,6 +32,8 @@ import com.littlehotel.littleHotelServer.service.impl.UserDetailsServiceImpl;
 @RequestMapping(value = "/api/auth")
 public class AuthController {
 
+	private static final Logger logger = LogManager.getLogger(AuthController.class);
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
@@ -35,6 +42,9 @@ public class AuthController {
 
 	@Autowired
 	private UserDetailsServiceImpl userDetailsServiceImpl;
+
+	@Autowired
+	private UserService userServiceImpl;
 
 	/*
 	 * Return a Response Entity <JWTResponse> containing token after successful
@@ -51,13 +61,15 @@ public class AuthController {
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JWTRequest authenticationRequest) throws Exception {
 
+		logger.info("Request to authenticate user");
+
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
 		final UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(authenticationRequest.getUsername());
 
 		final String token = authTokenUtil.generateToken(userDetails);
 
-		return ResponseEntity.ok(new JWTResponse(token));
+		return ResponseEntity.ok(new JWTResponse(token, userDetails.getUsername()));
 	}
 
 	/*
@@ -74,7 +86,15 @@ public class AuthController {
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<?> saveUser(@RequestBody ApplicationUserDTO applicationUserDTO) throws Exception {
-		// TODO Check if user already exists and handle error
+		logger.info("Request to Register user");
+
+		// Check if user already exists
+		if (userServiceImpl.checkUserExists(applicationUserDTO.getUsername())) {
+			logger.info("Check if User Exists");
+			return ResponseEntity.badRequest().body(
+					new MessageResponse("Error: Username " + applicationUserDTO.getUsername() + " already exists"));
+		}
+
 		return ResponseEntity.ok(userDetailsServiceImpl.save(applicationUserDTO));
 
 	}

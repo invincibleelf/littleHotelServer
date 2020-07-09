@@ -20,8 +20,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	@Autowired
-	private ApplicationUser user;
 
 	@Override
 	public List<ApplicationUser> getUsers() {
@@ -37,6 +35,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deleteUserById(Long id) {
 		userRepository.deleteById(id);
+	}
+
+	@Override
+	public Boolean checkUserExists(String username) {
+		return userRepository.existsByUsername(username);
+	
 	}
 
 	

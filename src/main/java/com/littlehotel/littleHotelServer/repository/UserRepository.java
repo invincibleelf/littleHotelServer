@@ -11,4 +11,6 @@ public interface UserRepository extends JpaRepository<ApplicationUser, Long>{
 	
 	@Query("select u from ApplicationUser u where u.username = ?1")
 	ApplicationUser findByUsername(String username);
+	
+	Boolean existsByUsername(String username);
 }
