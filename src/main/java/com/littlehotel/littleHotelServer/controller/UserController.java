@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.littlehotel.littleHotelServer.entity.User;
+import com.littlehotel.littleHotelServer.entity.ApplicationUser;
 import com.littlehotel.littleHotelServer.service.UserService;
 
 @RestController
@@ -27,27 +27,18 @@ public class UserController {
 	private UserService userService;
 
 	@GetMapping("/users")
-	public List<User> index() {
+	public List<ApplicationUser> index() {
 		logger.info("Get Users");
 		return userService.getUsers();
 	}
 
-	@PostMapping(value = "/users", consumes = "application/json", produces = "application/json")
-	public User createUser(@RequestBody User user) {
-		return userService.createUser(user);
-
-	}
 
 	@GetMapping(value = "/users/{id}", produces = "application/json")
-	public User getUser(@PathVariable Long id) {
+	public ApplicationUser getUser(@PathVariable Long id) {
 
 		return userService.getUserById(id);
 	}
 	
-	@GetMapping(value = "/users/getUser", produces = "application/json")
-	public User getUser(@Param("username") String username) {
-		return userService.getUserByUsername(username);
-	}
 
 	@DeleteMapping(value = "/users/{id}", produces = "application/json")
 	public void deleteUser(@PathVariable Long id) {

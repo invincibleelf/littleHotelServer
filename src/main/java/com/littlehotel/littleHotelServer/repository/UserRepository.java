@@ -4,11 +4,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.littlehotel.littleHotelServer.entity.User;
+import com.littlehotel.littleHotelServer.entity.ApplicationUser;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>{
+public interface UserRepository extends JpaRepository<ApplicationUser, Long>{
 	
-	@Query("select u from User u where u.username = ?1")
-	User findByUsername(String username);
+	@Query("select u from ApplicationUser u where u.username = ?1")
+	ApplicationUser findByUsername(String username);
 }

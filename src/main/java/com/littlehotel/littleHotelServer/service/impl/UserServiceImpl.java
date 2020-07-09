@@ -5,10 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.littlehotel.littleHotelServer.entity.User;
+import com.littlehotel.littleHotelServer.entity.ApplicationUser;
 import com.littlehotel.littleHotelServer.repository.UserRepository;
 import com.littlehotel.littleHotelServer.service.UserService;
 
+/*
+ * @author Sharad Shrestha
+ * Implementation Service class to handle application user save 
+ * 
+ */
 @Service
 public class UserServiceImpl implements UserService {
 	
@@ -16,29 +21,19 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 	
 	@Autowired
-	private User user;
+	private ApplicationUser user;
 
 	@Override
-	public User createUser(User user) {
-		return userRepository.save(user);
-	}
-
-	@Override
-	public List<User> getUsers() {
+	public List<ApplicationUser> getUsers() {
 		return userRepository.findAll();
 	}
 
 	@Override
-	public User getUserById(Long id) {
+	public ApplicationUser getUserById(Long id) {
 		
 		return userRepository.getOne(id);
 	}
 	
-	@Override
-	public User getUserByUsername(String username) {
-		return userRepository.findByUsername(username);
-	}
-
 	@Override
 	public void deleteUserById(Long id) {
 		userRepository.deleteById(id);

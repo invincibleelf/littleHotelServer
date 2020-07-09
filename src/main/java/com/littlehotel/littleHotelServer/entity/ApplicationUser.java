@@ -5,14 +5,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-
-public class User {
+@Table(name="user")
+public class ApplicationUser {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,6 +23,8 @@ public class User {
 	@Column(unique = true, nullable = false)
 	private String username;
 
+	@Column
+	@JsonIgnore
 	private String password;
 
 	public Long getId() {
