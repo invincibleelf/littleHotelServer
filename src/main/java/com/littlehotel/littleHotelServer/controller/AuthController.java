@@ -1,9 +1,11 @@
 package com.littlehotel.littleHotelServer.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -22,7 +24,6 @@ import com.littlehotel.littleHotelServer.model.JWTResponse;
 import com.littlehotel.littleHotelServer.model.MessageResponse;
 import com.littlehotel.littleHotelServer.service.UserService;
 import com.littlehotel.littleHotelServer.service.impl.UserDetailsServiceImpl;
-import com.littlehotel.littleHotelServer.service.impl.UserServiceImpl;
 
 /*
  * @author Sharad Shrestha
@@ -67,9 +68,12 @@ public class AuthController {
 
 		final UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(authenticationRequest.getUsername());
 
+		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+				.collect(Collectors.toList());
+
 		final String token = authTokenUtil.generateToken(userDetails);
 
-		return ResponseEntity.ok(new JWTResponse(token, userDetails.getUsername()));
+		return ResponseEntity.ok(new JWTResponse(token, userDetails.getUsername(),roles));
 	}
 
 	/*
@@ -95,7 +99,10 @@ public class AuthController {
 					new MessageResponse("Error: Username " + applicationUserDTO.getUsername() + " already exists"));
 		}
 
-		return ResponseEntity.ok(userDetailsServiceImpl.save(applicationUserDTO));
+		userDetailsServiceImpl.createUser(applicationUserDTO);
+
+		return ResponseEntity
+				.ok(new MessageResponse("User " + applicationUserDTO.getUsername() + " created successfully"));
 
 	}
 

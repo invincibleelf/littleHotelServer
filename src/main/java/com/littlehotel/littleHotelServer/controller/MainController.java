@@ -1,5 +1,6 @@
 package com.littlehotel.littleHotelServer.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,8 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api")
 public class MainController {
 
-	@GetMapping(value = "/hello")
-	public String hello() {
-		return "Hello From API";
+	@GetMapping(value = "/helloUser")
+	@PreAuthorize("hasRole('USER')")
+	public String helloUser() {
+		return "Hello From User";
+	}
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping(value = "/helloAdmin")
+	public String helloAdmin() {
+		return "Hello From Admin";
 	}
 }

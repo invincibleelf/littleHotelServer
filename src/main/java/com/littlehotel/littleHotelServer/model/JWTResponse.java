@@ -1,6 +1,7 @@
 package com.littlehotel.littleHotelServer.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 /*
  * @author Sharad Shrestha
@@ -14,10 +15,13 @@ public class JWTResponse implements Serializable {
 	private final String jwttoken;
 	
 	private String username;
+	
+	private List<String> roles;
 
-	public JWTResponse(String jwttoken,String username) {
+	public JWTResponse(String jwttoken,String username,List<String> roles) {
 		this.jwttoken = jwttoken;
 		this.username = username;
+		this.roles = roles;
 	}
 
 	public String getToken() {
@@ -26,6 +30,10 @@ public class JWTResponse implements Serializable {
 
 	public String getUsername() {
 		return username;
+	}
+
+	public List<String> getRoles() {
+		return roles;
 	}
 
 }
