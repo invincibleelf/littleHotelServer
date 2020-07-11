@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -40,9 +39,6 @@ import com.littlehotel.littleHotelServer.repository.VerificationTokenRepository;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	private static final Logger logger = LogManager.getLogger(UserDetailsServiceImpl.class);
-
-	@Autowired
-	private ApplicationUser user;
 
 	@Autowired
 	private PasswordEncoder bcryptEncoder;

@@ -2,9 +2,8 @@ package com.littlehotel.littleHotelServer.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.littlehotel.littleHotelServer.entity.ApplicationUser;
+import com.littlehotel.littleHotelServer.model.PasswordDTO;
 
 /*
  * @author Sharad Shrestha
@@ -13,13 +12,14 @@ import com.littlehotel.littleHotelServer.entity.ApplicationUser;
  */
 public interface UserService {
 
-
 	public List<ApplicationUser> getUsers();
-	
-	public ApplicationUser getUserById(Long id);
-	
-	public void deleteUserById(Long id);
-	
+
+	public ApplicationUser getUserById(Long id) throws Exception;
+
+	public void deleteUserById(Long id) throws Exception;
+
 	public Boolean checkUserExists(String username);
+
+	void changePassword(PasswordDTO passwordDTO, String username) throws Exception;
 
 }
