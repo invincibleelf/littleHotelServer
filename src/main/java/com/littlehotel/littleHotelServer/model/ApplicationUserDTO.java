@@ -7,6 +7,7 @@ public class ApplicationUserDTO {
 	private String username;
 	private String password;
 	private Set<String> roles;
+	private Integer mobile;
 	
 	public String getUsername() {
 		return username;
@@ -30,6 +31,14 @@ public class ApplicationUserDTO {
 
 	public void setRoles(Set<String> roles) {
 		this.roles = roles;
+	}
+
+	public Integer getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(Integer mobile) {
+		this.mobile = mobile;
 	}
 	
 }
