@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +18,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.littlehotel.littleHotelServer.constants.EnumAppUserStatus;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
@@ -23,15 +26,22 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class ApplicationUser {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String username;
 
 	@Column(nullable = false)
 	@JsonIgnore
 	private String password;
+
+	@Column(nullable = false)
+	private Integer mobile;
+
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private EnumAppUserStatus status;
 
 	@ManyToMany(fetch = FetchType.LAZY, targetEntity = ApplicationRole.class)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -41,9 +51,10 @@ public class ApplicationUser {
 
 	}
 
-	public ApplicationUser(String username, String password) {
+	public ApplicationUser(String username, String password, Integer mobile) {
 		this.username = username;
 		this.password = password;
+		this.mobile = mobile;
 	}
 
 	public Long getId() {
@@ -76,6 +87,22 @@ public class ApplicationUser {
 
 	public void setRoles(Set<ApplicationRole> roles) {
 		this.roles = roles;
+	}
+
+	public Integer getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(Integer mobile) {
+		this.mobile = mobile;
+	}
+
+	public EnumAppUserStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(EnumAppUserStatus status) {
+		this.status = status;
 	}
 
 }

@@ -14,7 +14,7 @@ public class MainController {
 	@GetMapping(value = "/helloUser")
 	@PreAuthorize("hasRole('USER')")
 	public String helloUser() {
-		return "Hello From User";
+		return "Email Sent";
 	}
 	
 	@PreAuthorize("hasRole('ADMIN')")

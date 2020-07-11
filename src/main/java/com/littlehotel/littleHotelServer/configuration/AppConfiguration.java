@@ -2,6 +2,7 @@ package com.littlehotel.littleHotelServer.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import com.littlehotel.littleHotelServer.entity.ApplicationUser;
 /*
@@ -9,10 +10,12 @@ import com.littlehotel.littleHotelServer.entity.ApplicationUser;
  * Main Configuration Class for Beans
  */
 @Configuration
+@EnableAsync
 public class AppConfiguration {
 
 	@Bean
 	public ApplicationUser applicationUser() {
 		return new ApplicationUser();
 	}
+
 }
