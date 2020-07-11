@@ -20,7 +20,6 @@ public class MainController {
 	@GetMapping(value = "/helloUser")
 	@PreAuthorize("hasRole('USER')")
 	public String helloUser() {
-		emailServer.sendSimpleMessage("grgsabina.tamu@gmail.com", "OI HAWA", "JAGWARA HAWA MANCHEY");
 		return "Email Sent";
 	}
 	

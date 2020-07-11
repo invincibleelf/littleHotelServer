@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import com.littlehotel.littleHotelServer.entity.ApplicationUser;
 /*
@@ -15,6 +16,7 @@ import com.littlehotel.littleHotelServer.entity.ApplicationUser;
  * Main Configuration Class for Beans
  */
 @Configuration
+@EnableAsync
 public class AppConfiguration {
 
 	@Bean

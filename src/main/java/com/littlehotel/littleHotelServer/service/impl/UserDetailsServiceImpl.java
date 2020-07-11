@@ -39,9 +39,6 @@ import com.littlehotel.littleHotelServer.repository.VerificationTokenRepository;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-	@Value("littlehotel.server.url")
-	private String serverUrl;
-
 	private static final Logger logger = LogManager.getLogger(UserDetailsServiceImpl.class);
 
 	@Autowired
@@ -121,8 +118,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		VerificationToken verificationToken = createVerificationToken(user);
 
 		// TODO Use scheduler to Send Email as Jobs and Email Template
-		emailService.sendSimpleMessage(user.getUsername(), "Register user",
-				serverUrl + "/auth/verify?token=" + verificationToken.getToken());
+		emailService.sendEmailVerificationMessage(user, verificationToken.getToken());
 
 		return user;
 
@@ -158,10 +154,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			logger.info("Save Expired Token");
 			verificationToken.setExpirationDate(LocalDateTime.now().minusDays(2));
 			verificationTokenRepository.save(verificationToken);
-		} else
+		} else {
 			logger.error(
 					"Token " + token + " with expiry " + verificationToken.getExpirationDate() + " has been expired");
-		throw new Exception("Token has been expired");
+			throw new Exception("Token has been expired");
+		}
 
 	}
 
