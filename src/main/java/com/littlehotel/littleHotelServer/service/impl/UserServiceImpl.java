@@ -12,6 +12,7 @@ import com.littlehotel.littleHotelServer.entity.ApplicationUser;
 import com.littlehotel.littleHotelServer.model.PasswordDTO;
 import com.littlehotel.littleHotelServer.repository.UserRepository;
 import com.littlehotel.littleHotelServer.service.UserService;
+import com.littlehotel.littleHotelServer.utility.PasswordMismatchException;
 
 /*
  * @author Sharad Shrestha
@@ -33,13 +34,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ApplicationUser getUserById(Long id) throws Exception {
+	public ApplicationUser getUserById(Long id) {
 
 		return userRepository.findById(id).get();
 	}
 
 	@Override
-	public void deleteUserById(Long id) throws Exception {
+	public void deleteUserById(Long id) {
 		ApplicationUser user = userRepository.findById(id).get();
 		user.setStatus(EnumAppUserStatus.DELETED);
 		userRepository.save(user);
@@ -52,15 +53,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void changePassword(PasswordDTO passwordDTO, String username) throws Exception {
+	public void changePassword(PasswordDTO passwordDTO, String username) throws PasswordMismatchException, Exception {
 		ApplicationUser applicationUser = userRepository.findByStatusAndUsername(EnumAppUserStatus.VERIFIED, username)
 				.orElseThrow(() -> new UsernameNotFoundException("User doesn't Exists"));
-		
+
 		if (bcryptEncoder.matches(passwordDTO.getOldPassword(), applicationUser.getPassword())) {
 			applicationUser.setPassword(bcryptEncoder.encode(passwordDTO.getNewPassword()));
 			userRepository.save(applicationUser);
-		}else {
-			throw new Exception("Old Password doesn't match");
+		} else {
+			throw new PasswordMismatchException("Old Password doesn't match");
 		}
 
 	}

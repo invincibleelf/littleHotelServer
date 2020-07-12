@@ -67,24 +67,16 @@ public class AuthController {
 
 		logger.info("Request to authenticate user");
 
-		try {
+		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-			authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+		final UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(authenticationRequest.getUsername());
 
-			final UserDetails userDetails = userDetailsServiceImpl
-					.loadUserByUsername(authenticationRequest.getUsername());
+		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+				.collect(Collectors.toList());
 
-			List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
-					.collect(Collectors.toList());
+		final String token = authTokenUtil.generateToken(userDetails);
 
-			final String token = authTokenUtil.generateToken(userDetails);
-
-			return ResponseEntity.ok(new JWTResponse(token, userDetails.getUsername(), roles));
-		} catch (UsernameNotFoundException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().body("exception : " + e.getMessage());
-		}
+		return ResponseEntity.ok(new JWTResponse(token, userDetails.getUsername(), roles));
 	}
 
 	/*
@@ -131,13 +123,9 @@ public class AuthController {
 	 */
 	@RequestMapping(value = "/verify", method = RequestMethod.GET)
 	public ResponseEntity<?> verifyUser(@Param("token") String token) throws Exception {
-		logger.info("Verify user with token "+token);
-		try {
+		logger.info("Verify user with token " + token);
 		userDetailsServiceImpl.verifyUser(token);
 		return ResponseEntity.ok().body(new MessageResponse("User Verified"));
-		}catch (Exception e) {
-			return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-		}
 
 	}
 
