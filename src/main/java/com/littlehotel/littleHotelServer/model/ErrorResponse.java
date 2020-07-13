@@ -22,6 +22,8 @@ public class ErrorResponse {
 	@JsonFormat(pattern = "dd-MM-yyyy hh:mm:ss")
 	private LocalDateTime dateTime;
 
+	private String rejectedValue;
+
 	private List<SubError> errors;
 
 	public ErrorResponse() {
@@ -32,6 +34,13 @@ public class ErrorResponse {
 		this();
 		this.status = status;
 		this.message = message;
+	}
+
+	public ErrorResponse(HttpStatus status, String message, String rejectedValue) {
+		this();
+		this.status = status;
+		this.message = message;
+		this.rejectedValue = rejectedValue;
 	}
 
 	public ErrorResponse(HttpStatus status, String message, List<SubError> errors) {
@@ -55,6 +64,14 @@ public class ErrorResponse {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public String getRejectedValue() {
+		return rejectedValue;
+	}
+
+	public void setRejectedValue(String rejectedValue) {
+		this.rejectedValue = rejectedValue;
 	}
 
 	public List<SubError> getErrors() {
