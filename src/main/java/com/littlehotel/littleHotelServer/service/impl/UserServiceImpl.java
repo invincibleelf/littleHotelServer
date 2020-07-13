@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
 			applicationUser.setPassword(bcryptEncoder.encode(passwordDTO.getNewPassword()));
 			userRepository.save(applicationUser);
 		} else {
-			throw new PasswordMismatchException("Old Password doesn't match",passwordDTO.getOldPassword());
+			throw new PasswordMismatchException("Old Password doesn't match", passwordDTO.getOldPassword());
 		}
 
 	}

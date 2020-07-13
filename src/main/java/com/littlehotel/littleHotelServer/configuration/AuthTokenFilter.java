@@ -20,6 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.littlehotel.littleHotelServer.service.impl.UserDetailsServiceImpl;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.SignatureException;
 
 /*
  * @author Sharad Shrestha
@@ -55,8 +56,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 				username = authTokenUtil.getUsernameFromToken(jwtToken);
 			} catch (IllegalArgumentException e) {
 				logger.error("Unable to obtain JWT Token");
+
 			} catch (ExpiredJwtException e) {
 				logger.error("Expired JWT Token");
+			} catch (SignatureException e) {
+				logger.info("Unable to Obtain signature token");
+			} catch (Exception e) {
+				logger.error(e.getLocalizedMessage());
 			}
 		} else {
 			logger.warn("JWT Token does not begin with Bearer String");
