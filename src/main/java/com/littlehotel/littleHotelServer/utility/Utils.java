@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 
+import com.littlehotel.littleHotelServer.entity.Hotel;
 import com.littlehotel.littleHotelServer.model.ErrorResponse;
+import com.littlehotel.littleHotelServer.model.HotelDTO;
 import com.littlehotel.littleHotelServer.model.SubError;
 
 /**
@@ -51,5 +53,32 @@ public class Utils {
 		return errorResponse;
 	}
 
+	public static HotelDTO ConvertHotelEntityToHotelDTO(Hotel hotel) {
+		HotelDTO hotelDTO = new HotelDTO();
+
+		hotelDTO.setId(hotel.getId());
+		hotelDTO.setName(hotel.getName());
+		hotelDTO.setCode(hotel.getCode());
+		hotelDTO.setEmail(hotel.getEmail());
+		hotelDTO.setPhoneNumber(hotel.getPhoneNumber());
+		hotelDTO.setAddress(hotel.getAddress().getAddress());
+		hotelDTO.setSuburb(hotel.getAddress().getSuburb());
+		hotelDTO.setState(hotel.getAddress().getState().name());
+		hotelDTO.setCountry(hotel.getAddress().getCountry().name());
+		hotelDTO.setPostcode(hotel.getAddress().getPostcode());
+		return hotelDTO;
+	}
+	
+	public static List<HotelDTO> ConvertHotelEntityListToHotelDTOList(List<Hotel> hotels){
+		List<HotelDTO> hotelDTOs = new ArrayList<>();
+		hotels.forEach((hotel)->{
+			HotelDTO hotelDTO = ConvertHotelEntityToHotelDTO(hotel);
+			hotelDTOs.add(hotelDTO);
+			
+		});
+		
+		return hotelDTOs;
+		
+	}
 
 }

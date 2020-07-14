@@ -28,6 +28,16 @@ public class Address {
 	private EnumCountry country;
 	
 	private Integer postcode;
+	
+	public Address() {
+		
+	}
+	
+	public Address (String address, String suburb,Integer postcode) {
+		this.address = address;
+		this.suburb = suburb;
+		this.postcode = postcode;
+	}
 
 	public String getAddress() {
 		return address;

@@ -8,9 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.littlehotel.littleHotelServer.constants.EnumCountry;
-import com.littlehotel.littleHotelServer.constants.EnumStates;
-
 @Entity
 @Table(name = "hotels")
 public class Hotel {
@@ -34,6 +31,21 @@ public class Hotel {
 
 	public Hotel() {
 
+	}
+
+	public Hotel(String name, String code, Integer phoneNumber, String email) {
+		this.name = name;
+		this.code= code;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+	}
+
+	public Hotel(String name, String code, Integer phoneNumber, String email, Address address) {
+		this.name = name;
+		this.code= code;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+		this.address = address;
 	}
 
 	public String getCode() {
@@ -79,6 +91,5 @@ public class Hotel {
 	public Long getId() {
 		return id;
 	}
-
 
 }
