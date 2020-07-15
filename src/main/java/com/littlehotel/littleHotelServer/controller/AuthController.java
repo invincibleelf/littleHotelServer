@@ -4,12 +4,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,7 +16,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,13 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.littlehotel.littleHotelServer.configuration.AuthTokenUtil;
 import com.littlehotel.littleHotelServer.model.ApplicationUserDTO;
-import com.littlehotel.littleHotelServer.model.ErrorResponse;
 import com.littlehotel.littleHotelServer.model.JWTRequest;
 import com.littlehotel.littleHotelServer.model.JWTResponse;
 import com.littlehotel.littleHotelServer.model.MessageResponse;
 import com.littlehotel.littleHotelServer.service.UserService;
 import com.littlehotel.littleHotelServer.service.impl.UserDetailsServiceImpl;
-import com.littlehotel.littleHotelServer.utility.Utils;
 
 /*
  * @author Sharad Shrestha
@@ -40,6 +37,7 @@ import com.littlehotel.littleHotelServer.utility.Utils;
  */
 @RestController
 @RequestMapping(value = "/api/auth")
+@Validated
 public class AuthController {
 
 	private static final Logger logger = LogManager.getLogger(AuthController.class);
@@ -69,14 +67,8 @@ public class AuthController {
 	 * 
 	 */
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody JWTRequest authenticationRequest,
-			BindingResult bindingResult) throws UsernameNotFoundException, Exception {
-
-		if (bindingResult.hasErrors()) {
-			ErrorResponse errorResponse = Utils.createErrorResponse(HttpStatus.BAD_REQUEST, "Invalid Input Fields",
-					bindingResult.getFieldErrors());
-			return ResponseEntity.badRequest().body(errorResponse);
-		}
+	public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody JWTRequest authenticationRequest)
+			throws UsernameNotFoundException, Exception {
 
 		logger.info("Request to authenticate user");
 
@@ -105,15 +97,8 @@ public class AuthController {
 	 * 
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public ResponseEntity<?> saveUser(@Valid @RequestBody ApplicationUserDTO applicationUserDTO,
-			BindingResult bindingResult) throws Exception {
+	public ResponseEntity<?> saveUser(@Valid @RequestBody ApplicationUserDTO applicationUserDTO) throws Exception {
 		logger.info("Request to Register user");
-
-		if (bindingResult.hasErrors()) {
-			ErrorResponse errorResponse = Utils.createErrorResponse(HttpStatus.BAD_REQUEST, "Invalid Input Fields",
-					bindingResult.getFieldErrors());
-			return ResponseEntity.badRequest().body(errorResponse);
-		}
 
 		// Check if user already exists
 		if (userServiceImpl.checkUserExists(applicationUserDTO.getUsername())) {
@@ -142,7 +127,7 @@ public class AuthController {
 	 * 
 	 */
 	@RequestMapping(value = "/verify", method = RequestMethod.GET)
-	public ResponseEntity<?> verifyUser(@Valid @RequestParam("token") @NotEmpty String token) throws Exception {
+	public ResponseEntity<?> verifyUser(@Valid @RequestParam("token") @NotBlank String token) throws Exception {
 		logger.info("Verify user with token " + token);
 		userDetailsServiceImpl.verifyUser(token);
 		return ResponseEntity.ok().body(new MessageResponse("User Verified"));
