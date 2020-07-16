@@ -3,10 +3,12 @@ package com.littlehotel.littleHotelServer.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,9 +16,11 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.littlehotel.littleHotelServer.configuration.AuthTokenUtil;
@@ -33,6 +37,7 @@ import com.littlehotel.littleHotelServer.service.impl.UserDetailsServiceImpl;
  */
 @RestController
 @RequestMapping(value = "/api/auth")
+@Validated
 public class AuthController {
 
 	private static final Logger logger = LogManager.getLogger(AuthController.class);
@@ -62,29 +67,21 @@ public class AuthController {
 	 * 
 	 */
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody JWTRequest authenticationRequest)
+	public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody JWTRequest authenticationRequest)
 			throws UsernameNotFoundException, Exception {
 
 		logger.info("Request to authenticate user");
 
-		try {
+		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-			authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+		final UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(authenticationRequest.getUsername());
 
-			final UserDetails userDetails = userDetailsServiceImpl
-					.loadUserByUsername(authenticationRequest.getUsername());
+		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+				.collect(Collectors.toList());
 
-			List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
-					.collect(Collectors.toList());
+		final String token = authTokenUtil.generateToken(userDetails);
 
-			final String token = authTokenUtil.generateToken(userDetails);
-
-			return ResponseEntity.ok(new JWTResponse(token, userDetails.getUsername(), roles));
-		} catch (UsernameNotFoundException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().body("exception : " + e.getMessage());
-		}
+		return ResponseEntity.ok(new JWTResponse(token, userDetails.getUsername(), roles));
 	}
 
 	/*
@@ -100,7 +97,7 @@ public class AuthController {
 	 * 
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public ResponseEntity<?> saveUser(@RequestBody ApplicationUserDTO applicationUserDTO) throws Exception {
+	public ResponseEntity<?> saveUser(@Valid @RequestBody ApplicationUserDTO applicationUserDTO) throws Exception {
 		logger.info("Request to Register user");
 
 		// Check if user already exists
@@ -130,14 +127,10 @@ public class AuthController {
 	 * 
 	 */
 	@RequestMapping(value = "/verify", method = RequestMethod.GET)
-	public ResponseEntity<?> verifyUser(@Param("token") String token) throws Exception {
-		logger.info("Verify user with token "+token);
-		try {
+	public ResponseEntity<?> verifyUser(@Valid @RequestParam("token") @NotBlank String token) throws Exception {
+		logger.info("Verify user with token " + token);
 		userDetailsServiceImpl.verifyUser(token);
 		return ResponseEntity.ok().body(new MessageResponse("User Verified"));
-		}catch (Exception e) {
-			return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-		}
 
 	}
 
@@ -155,9 +148,9 @@ public class AuthController {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		} catch (DisabledException e) {
-			throw new Exception("USER_DISABLED", e);
+			throw new Exception("Username and password doesn't exist", e);
 		} catch (BadCredentialsException e) {
-			throw new Exception("INVALID_CREDENTIALS", e);
+			throw new Exception("Username and password doesn't exist", e);
 		}
 	}
 

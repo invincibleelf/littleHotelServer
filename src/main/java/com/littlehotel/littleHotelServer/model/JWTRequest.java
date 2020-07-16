@@ -1,5 +1,7 @@
 package com.littlehotel.littleHotelServer.model;
 
+import javax.validation.constraints.NotEmpty;
+
 /*
  * @author Sharad Shrestha
  * Class to hold username and password for Login authetication request
@@ -7,8 +9,10 @@ package com.littlehotel.littleHotelServer.model;
  */
 public class JWTRequest {
 
+	@NotEmpty
 	private String username;
 
+	@NotEmpty
 	private String password;
 
 	public JWTRequest() {

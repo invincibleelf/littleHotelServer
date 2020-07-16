@@ -153,6 +153,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		} else {
 			logger.error(
 					"Token " + token + " with expiry " + verificationToken.getExpirationDate() + " has been expired");
+			// Throw token expired exception			
 			throw new Exception("Token has been expired");
 		}
 

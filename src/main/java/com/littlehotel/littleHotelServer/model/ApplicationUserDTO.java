@@ -2,11 +2,25 @@ package com.littlehotel.littleHotelServer.model;
 
 import java.util.Set;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 public class ApplicationUserDTO {
 
+	@Email
+	@NotEmpty
 	private String username;
+	
+	@NotEmpty
+	@Pattern(regexp = "^(?=.*[0-9])(?=.[a-z]).{6,32}")
 	private String password;
+	
 	private Set<String> roles;
+	
+	// TODO Add regex validation for mobile phone	
+	@NotNull
 	private Integer mobile;
 	
 	public String getUsername() {

@@ -14,9 +14,9 @@ public interface UserService {
 
 	public List<ApplicationUser> getUsers();
 
-	public ApplicationUser getUserById(Long id) throws Exception;
+	public ApplicationUser getUserById(Long id);
 
-	public void deleteUserById(Long id) throws Exception;
+	public void deleteUserById(Long id);
 
 	public Boolean checkUserExists(String username);
 
