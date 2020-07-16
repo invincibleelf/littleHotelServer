@@ -7,8 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 
 import com.littlehotel.littleHotelServer.entity.Hotel;
+import com.littlehotel.littleHotelServer.entity.Room;
+import com.littlehotel.littleHotelServer.entity.RoomStatus;
+import com.littlehotel.littleHotelServer.entity.RoomType;
 import com.littlehotel.littleHotelServer.model.ErrorResponse;
 import com.littlehotel.littleHotelServer.model.HotelDTO;
+import com.littlehotel.littleHotelServer.model.RoomDTO;
+import com.littlehotel.littleHotelServer.model.RoomStatusDTO;
+import com.littlehotel.littleHotelServer.model.RoomTypeDTO;
 import com.littlehotel.littleHotelServer.model.SubError;
 
 /**
@@ -45,7 +51,10 @@ public class Utils {
 				subError.setObject(fieldError.getObjectName());
 				subError.setField(fieldError.getField());
 				subError.setMessage(fieldError.getDefaultMessage());
-				subError.setRejectedValue((String) fieldError.getRejectedValue());
+				if (fieldError.getRejectedValue() != null) {
+					subError.setRejectedValue(fieldError.getRejectedValue().toString());
+				}
+
 				errors.add(subError);
 			});
 		}
@@ -53,7 +62,13 @@ public class Utils {
 		return errorResponse;
 	}
 
-	public static HotelDTO ConvertHotelEntityToHotelDTO(Hotel hotel) {
+	/**
+	 * Convert {@link Hotel} Entity Object to the respective {@link HotelDTO} object
+	 * 
+	 * @param hotel the Hotel entity
+	 * @return hotelDTO
+	 */
+	public static HotelDTO convertHotelEntityToHotelDTO(Hotel hotel) {
 		HotelDTO hotelDTO = new HotelDTO();
 
 		hotelDTO.setId(hotel.getId());
@@ -68,17 +83,94 @@ public class Utils {
 		hotelDTO.setPostcode(hotel.getAddress().getPostcode());
 		return hotelDTO;
 	}
-	
-	public static List<HotelDTO> ConvertHotelEntityListToHotelDTOList(List<Hotel> hotels){
+
+	public static List<HotelDTO> convertHotelEntityListToHotelDTOList(List<Hotel> hotels) {
 		List<HotelDTO> hotelDTOs = new ArrayList<>();
-		hotels.forEach((hotel)->{
-			HotelDTO hotelDTO = ConvertHotelEntityToHotelDTO(hotel);
+		hotels.forEach((hotel) -> {
+			HotelDTO hotelDTO = convertHotelEntityToHotelDTO(hotel);
 			hotelDTOs.add(hotelDTO);
-			
+
+		});
+
+		return hotelDTOs;
+
+	}
+
+	/**
+	 * Convert {@link RoomStatus} Entity Object to the respective
+	 * {@link RoomStatusDTO} object
+	 * 
+	 * @param roomStatus
+	 * @return
+	 */
+	public static RoomStatusDTO convertRoomStatusEntityToDTO(RoomStatus roomStatus) {
+		RoomStatusDTO roomStatusDTO = new RoomStatusDTO(roomStatus.getId(), roomStatus.getStatus().toString(),
+				roomStatus.getDescription());
+		return roomStatusDTO;
+
+	}
+
+	public static List<RoomStatusDTO> convertRoomStatusEntityListToDTO(List<RoomStatus> roomStatuses) {
+		List<RoomStatusDTO> roomStatusDTOs = new ArrayList<>();
+		roomStatuses.forEach((roomStatus) -> {
+			RoomStatusDTO roomStatusDTO = convertRoomStatusEntityToDTO(roomStatus);
+			roomStatusDTOs.add(roomStatusDTO);
+		});
+		return roomStatusDTOs;
+	}
+
+	/**
+	 * Convert {@link RoomType} Entity Object to the respective {@link RoomTypeDTO}
+	 * object
+	 * 
+	 * @param roomType
+	 * @return
+	 */
+	public static RoomTypeDTO convertRoomTypeEntityToDTO(RoomType roomType) {
+
+		RoomTypeDTO roomTypeDTO = new RoomTypeDTO(roomType.getId(), roomType.getType().toString(),
+				roomType.getDescription());
+		return roomTypeDTO;
+
+	}
+
+	public static List<RoomTypeDTO> convertRoomTypeEntityListToDTO(List<RoomType> roomTypes) {
+		List<RoomTypeDTO> roomTypeDTOs = new ArrayList<>();
+		roomTypes.forEach((roomType) -> {
+			RoomTypeDTO roomTypeDTO = Utils.convertRoomTypeEntityToDTO(roomType);
+			roomTypeDTOs.add(roomTypeDTO);
+		});
+		return roomTypeDTOs;
+	}
+
+	/**
+	 * Convert {@link Room} Entity Object to the respective {@link RoomTypeDTO}
+	 * object
+	 * 
+	 * @param room
+	 * @return
+	 */
+	public static RoomDTO convertRoomEntityToDTO(Room room) {
+
+		RoomDTO roomDTO = new RoomDTO(room.getId(), room.getName(), room.getNumber(), room.getDescription(),
+				room.getRate());
+
+		roomDTO.setHotelId(room.getHotel().getId());
+		roomDTO.setHotelName(room.getHotel().getName());
+		roomDTO.setRoomStatusDTO(convertRoomStatusEntityToDTO(room.getStatus()));
+		roomDTO.setRoomTypeDTO(convertRoomTypeEntityToDTO(room.getType()));
+		return roomDTO;
+	}
+	
+	public static List<RoomDTO> convertRoomEntityListToDTO(List<Room> rooms){
+		List<RoomDTO> roomDTOs = new ArrayList<>();
+		
+		rooms.forEach((room) -> {
+			RoomDTO roomDTO = convertRoomEntityToDTO(room);
+			roomDTOs.add(roomDTO);
 		});
 		
-		return hotelDTOs;
-		
+		return roomDTOs;
 	}
 
 }

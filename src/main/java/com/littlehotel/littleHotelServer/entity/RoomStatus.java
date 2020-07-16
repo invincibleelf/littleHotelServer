@@ -9,9 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.littlehotel.littleHotelServer.constants.EnumRoomStatus;
 
 @Entity
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Table(name = "rooms_status")
 public class RoomStatus {
 
@@ -20,13 +22,18 @@ public class RoomStatus {
 	private Long id;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false )
+	@Column(nullable = false, unique = true)
 	private EnumRoomStatus status;
 
 	private String description;
-	
+
 	public RoomStatus() {
-		
+
+	}
+
+	public RoomStatus(EnumRoomStatus status, String description) {
+		this.status = status;
+		this.description = description;
 	}
 
 	public Long getId() {

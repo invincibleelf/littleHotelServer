@@ -3,7 +3,6 @@ package com.littlehotel.littleHotelServer.controller;
 import java.util.List;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -51,10 +50,10 @@ public class HotelController {
 	@GetMapping(value = "/hotels")
 	public ResponseEntity<?> all() {
 		logger.info("Request to get list of hotels");
-		
+
 		List<Hotel> hotels = hotelService.getAllHotels();
-		List<HotelDTO> hotelDTOs = Utils.ConvertHotelEntityListToHotelDTOList(hotels);
-		
+		List<HotelDTO> hotelDTOs = Utils.convertHotelEntityListToHotelDTOList(hotels);
+
 		return ResponseEntity.ok().body(hotelDTOs);
 	}
 
@@ -65,12 +64,12 @@ public class HotelController {
 	 * @return ResponseEntity
 	 */
 	@GetMapping(value = "/hotels/{id}")
-	public ResponseEntity<?> get(@Min(5) @PathVariable("id") Long id) throws Exception {
+	public ResponseEntity<?> get(@PathVariable("id") Long id) throws Exception {
 		logger.info("Request to get hotel with id " + id);
-		
+
 		Hotel hotel = hotelService.getHotelById(id);
-		HotelDTO hotelDTO = Utils.ConvertHotelEntityToHotelDTO(hotel);
-		
+		HotelDTO hotelDTO = Utils.convertHotelEntityToHotelDTO(hotel);
+
 		return ResponseEntity.ok().body(hotelDTO);
 	}
 
@@ -87,10 +86,10 @@ public class HotelController {
 	public ResponseEntity<?> create(@Valid @RequestBody HotelDTO hotelDTO) {
 
 		logger.info("Request to create hotel ");
-		
+
 		Hotel hotel = hotelService.createHotel(hotelDTO);
-		
-		return ResponseEntity.ok().body(Utils.ConvertHotelEntityToHotelDTO(hotel));
+
+		return ResponseEntity.ok().body(Utils.convertHotelEntityToHotelDTO(hotel));
 
 	}
 
@@ -107,10 +106,10 @@ public class HotelController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody HotelDTO hotelDTO) {
 		logger.info("Request to update hotel with id = " + id);
-		
+
 		Hotel hotel = hotelService.updateHotel(id, hotelDTO);
-		
-		return ResponseEntity.ok().body(Utils.ConvertHotelEntityToHotelDTO(hotel));
+
+		return ResponseEntity.ok().body(Utils.convertHotelEntityToHotelDTO(hotel));
 	}
 
 	/**

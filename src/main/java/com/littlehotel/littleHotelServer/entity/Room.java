@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,8 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "rooms")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Room {
 
 	@Id
@@ -30,20 +34,27 @@ public class Room {
 	@Column(precision = 10, scale = 2, nullable = false)
 	private BigDecimal rate;
 
-	@ManyToOne(targetEntity = Hotel.class)
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Hotel.class)
 	@JoinColumn(nullable = false)
 	private Hotel hotel;
 
-	@ManyToOne(targetEntity = RoomStatus.class)
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = RoomStatus.class)
 	@JoinColumn(nullable = false)
 	private RoomStatus status;
 
-	@ManyToOne(targetEntity = RoomType.class)
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = RoomType.class)
 	@JoinColumn(nullable = false)
 	private RoomType type;
 
 	public Room() {
 
+	}
+
+	public Room(String name, String number, String description, BigDecimal rate) {
+		this.name = name;
+		this.number = number;
+		this.description = description;
+		this.rate = rate;
 	}
 
 	public String getName() {
