@@ -1,6 +1,7 @@
 package com.littlehotel.littleHotelServer.entity;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -16,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "rooms")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Room {
 
 	@Id
@@ -35,7 +37,7 @@ public class Room {
 	private BigDecimal rate;
 
 	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Hotel.class)
-	@JoinColumn(nullable = false)
+	@JoinColumn(name = "hotel_id", referencedColumnName = "id")
 	private Hotel hotel;
 
 	@ManyToOne(fetch = FetchType.LAZY, targetEntity = RoomStatus.class)
@@ -45,6 +47,9 @@ public class Room {
 	@ManyToOne(fetch = FetchType.LAZY, targetEntity = RoomType.class)
 	@JoinColumn(nullable = false)
 	private RoomType type;
+
+	@ManyToMany(targetEntity = Reservation.class, mappedBy = "rooms")
+	private Set<Reservation> reservations;
 
 	public Room() {
 
@@ -115,6 +120,14 @@ public class Room {
 
 	public Long getId() {
 		return id;
+	}
+
+	public Set<Reservation> getReservations() {
+		return reservations;
+	}
+
+	public void setReservations(Set<Reservation> reservations) {
+		this.reservations = reservations;
 	}
 
 }
