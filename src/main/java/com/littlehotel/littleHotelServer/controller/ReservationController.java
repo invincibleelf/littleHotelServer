@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.littlehotel.littleHotelServer.entity.Guest;
 import com.littlehotel.littleHotelServer.entity.Reservation;
 import com.littlehotel.littleHotelServer.model.ReservationDTO;
 import com.littlehotel.littleHotelServer.service.impl.ReservationServiceImpl;
@@ -55,8 +56,11 @@ public class ReservationController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> get(@PathVariable("id") Long id) {
 		logger.info("Request to retrieve reservation by id = " + id);
-		Reservation reservation = reservationService.getReservationById(id);
-		return ResponseEntity.ok().body(Utils.convertReservationEntityToDTO(reservation));
+//		Reservation reservation = reservationService.getReservationById(id);
+//		return ResponseEntity.ok().body(Utils.convertReservationEntityToDTO(reservation));
+		Guest guest = reservationService.getTest("test@gmail.com");
+		return ResponseEntity.ok().body(Utils.convertGuestEntityToDTO(guest));
+		
 	}
 
 	/**

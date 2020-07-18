@@ -2,7 +2,10 @@ package com.littlehotel.littleHotelServer.service.impl;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,12 +53,13 @@ public class ReservationServiceImpl implements ReservationService {
 	public List<Reservation> getAllReservations() {
 		return reservationRepository.findAll();
 	}
-	
+
 	@Override
 	public Reservation getReservationById(Long id) {
 		return reservationRepository.getOne(id);
 	}
 
+	@Transactional
 	@Override
 	public Reservation createReservation(ReservationDTO reservationDTO) {
 		Reservation reservation = new Reservation(reservationDTO.getDateFrom(), reservationDTO.getDateTo(),
@@ -69,18 +73,24 @@ public class ReservationServiceImpl implements ReservationService {
 		reservation.setRooms(rooms);
 
 		GuestDTO guestDTO = reservationDTO.getGuestDTO();
-		Address address = new Address(guestDTO.getAddress(), guestDTO.getSuburb(), guestDTO.getPostcode());
-		address.setState(EnumStates.valueOf(guestDTO.getState()));
-		address.setCountry(EnumCountry.valueOf(guestDTO.getCountry()));
-		logger.info("Request database to save address");
-		addressRepository.save(address);
 
-		Guest guest = new Guest(guestDTO.getFirstname(), guestDTO.getLastname(), guestDTO.getMobile(),
-				guestDTO.getEmail(), address);
-		logger.info("Request database to save guest");
-		guestRepository.save(guest);
+		Optional<?> optional = guestRepository.findByEmail(guestDTO.getEmail());
 
-		reservation.setGuest(guest);
+		if (optional.isEmpty()) {
+			Address address = new Address(guestDTO.getAddress(), guestDTO.getSuburb(), guestDTO.getPostcode());
+			address.setState(EnumStates.valueOf(guestDTO.getState()));
+			address.setCountry(EnumCountry.valueOf(guestDTO.getCountry()));
+			logger.info("Request database to save address");
+			addressRepository.save(address);
+			Guest guest = new Guest(guestDTO.getFirstname(), guestDTO.getLastname(), guestDTO.getMobile(),
+					guestDTO.getEmail(), address);
+			logger.info("Request database to save guest");
+			guestRepository.save(guest);
+			reservation.setGuest(guest);
+		} else {
+			reservation.setGuest((Guest) optional.get());
+		}
+
 		return reservationRepository.save(reservation);
 	}
 
@@ -89,7 +99,5 @@ public class ReservationServiceImpl implements ReservationService {
 		// TODO Implement when necessary
 		return null;
 	}
-
-
 
 }

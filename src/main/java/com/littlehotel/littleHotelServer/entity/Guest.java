@@ -3,6 +3,7 @@ package com.littlehotel.littleHotelServer.entity;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -30,6 +31,7 @@ public class Guest {
 
 	private Integer mobile;
 
+	@Column(unique = true)
 	private String email;
 
 	@OneToOne(fetch = FetchType.LAZY, targetEntity = Address.class)
