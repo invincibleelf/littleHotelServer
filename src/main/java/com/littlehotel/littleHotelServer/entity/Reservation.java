@@ -26,11 +26,11 @@ public class Reservation {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	private LocalDate bookedDate;
+	private LocalDate bookedDate = LocalDate.now();
 
-	private LocalDate DateFrom;
+	private LocalDate dateFrom;
 
-	private LocalDate DateTo;
+	private LocalDate dateTo;
 
 	private Integer count;
 
@@ -53,6 +53,13 @@ public class Reservation {
 
 	}
 
+	public Reservation(LocalDate dateFrom, LocalDate dateTo, Integer count, EnumBookingStatus status) {
+		this.dateFrom = dateFrom;
+		this.dateTo = dateTo;
+		this.count = count;
+		this.status = status;
+	}
+
 	public LocalDate getBookedDate() {
 		return bookedDate;
 	}
@@ -62,19 +69,19 @@ public class Reservation {
 	}
 
 	public LocalDate getDateFrom() {
-		return DateFrom;
+		return dateFrom;
 	}
 
 	public void setDateFrom(LocalDate dateFrom) {
-		DateFrom = dateFrom;
+		this.dateFrom = dateFrom;
 	}
 
 	public LocalDate getDateTo() {
-		return DateTo;
+		return dateTo;
 	}
 
 	public void setDateTo(LocalDate dateTo) {
-		DateTo = dateTo;
+		this.dateTo = dateTo;
 	}
 
 	public Integer getCount() {

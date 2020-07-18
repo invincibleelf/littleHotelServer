@@ -1,45 +1,59 @@
 package com.littlehotel.littleHotelServer.model;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sun.istack.NotNull;
 
 public class ReservationDTO {
 
 	private Long id;
 
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	private LocalDate bookedDate;
+	private LocalDate bookedDate = LocalDate.now();
 
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@FutureOrPresent
-	private LocalDate DateFrom;
+	@NotNull
+	private LocalDate dateFrom;
 
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Future
-	private LocalDate DateTo;
+	@NotNull
+	private LocalDate dateTo;
 
 	@Positive
+	@NotNull
 	private Integer count = 1;
 
-	@NotNull
 	@Positive
+	@NotNull
 	private Long hotelId;
 
 	@Valid
-	@NotNull
 	@JsonProperty(value = "guest")
+	@NotNull
 	private GuestDTO guestDTO;
 
+	@NotEmpty
 	private Set<Long> roomIds;
+
+	private List<RoomDTO> rooms;
+
+	public ReservationDTO(Long id, LocalDate dateFrom, LocalDate dateTo, Integer count) {
+		this.id = id;
+		this.dateFrom = dateFrom;
+		this.dateTo = dateTo;
+		this.count = count;
+	}
 
 	public Long getId() {
 		return id;
@@ -58,19 +72,19 @@ public class ReservationDTO {
 	}
 
 	public LocalDate getDateFrom() {
-		return DateFrom;
+		return dateFrom;
 	}
 
 	public void setDateFrom(LocalDate dateFrom) {
-		DateFrom = dateFrom;
+		this.dateFrom = dateFrom;
 	}
 
 	public LocalDate getDateTo() {
-		return DateTo;
+		return dateTo;
 	}
 
 	public void setDateTo(LocalDate dateTo) {
-		DateTo = dateTo;
+		this.dateTo = dateTo;
 	}
 
 	public Integer getCount() {
@@ -103,6 +117,14 @@ public class ReservationDTO {
 
 	public void setRoomIds(Set<Long> roomIds) {
 		this.roomIds = roomIds;
+	}
+
+	public List<RoomDTO> getRooms() {
+		return rooms;
+	}
+
+	public void setRooms(List<RoomDTO> rooms) {
+		this.rooms = rooms;
 	}
 
 }

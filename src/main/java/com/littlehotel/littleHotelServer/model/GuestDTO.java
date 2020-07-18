@@ -4,6 +4,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 public class GuestDTO {
 
@@ -33,10 +34,25 @@ public class GuestDTO {
 	@NotBlank
 	private String country;
 
-	@NotBlank
+	@PositiveOrZero
 	private Integer postcode;
 
 	public GuestDTO() {
+	}
+
+	public GuestDTO(Long id, String firstname, String lastname, Integer mobile, String email, String address,
+			String suburb, String state, String country, Integer postcode) {
+
+		this.id = id;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.mobile = mobile;
+		this.email = email;
+		this.address = address;
+		this.suburb = suburb;
+		this.state = state;
+		this.country = country;
+		this.postcode = postcode;
 	}
 
 	public Long getId() {

@@ -6,12 +6,16 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 
+import com.littlehotel.littleHotelServer.entity.Guest;
 import com.littlehotel.littleHotelServer.entity.Hotel;
+import com.littlehotel.littleHotelServer.entity.Reservation;
 import com.littlehotel.littleHotelServer.entity.Room;
 import com.littlehotel.littleHotelServer.entity.RoomStatus;
 import com.littlehotel.littleHotelServer.entity.RoomType;
 import com.littlehotel.littleHotelServer.model.ErrorResponse;
+import com.littlehotel.littleHotelServer.model.GuestDTO;
 import com.littlehotel.littleHotelServer.model.HotelDTO;
+import com.littlehotel.littleHotelServer.model.ReservationDTO;
 import com.littlehotel.littleHotelServer.model.RoomDTO;
 import com.littlehotel.littleHotelServer.model.RoomStatusDTO;
 import com.littlehotel.littleHotelServer.model.RoomTypeDTO;
@@ -19,6 +23,7 @@ import com.littlehotel.littleHotelServer.model.SubError;
 
 /**
  * Static Utility methods for handling validations, generating response messages
+ * and converting entities to DTOs
  * 
  * @author Sharad Shrestha
  *
@@ -161,16 +166,57 @@ public class Utils {
 		roomDTO.setRoomTypeDTO(convertRoomTypeEntityToDTO(room.getType()));
 		return roomDTO;
 	}
-	
-	public static List<RoomDTO> convertRoomEntityListToDTO(List<Room> rooms){
+
+	public static List<RoomDTO> convertRoomEntityListToDTO(List<Room> rooms) {
 		List<RoomDTO> roomDTOs = new ArrayList<>();
-		
+
 		rooms.forEach((room) -> {
 			RoomDTO roomDTO = convertRoomEntityToDTO(room);
 			roomDTOs.add(roomDTO);
 		});
-		
+
 		return roomDTOs;
+	}
+
+	public static ReservationDTO convertReservationEntityToDTO(Reservation reservation) {
+		ReservationDTO reservationDTO = new ReservationDTO(reservation.getId(), reservation.getDateFrom(),
+				reservation.getDateTo(), reservation.getCount());
+
+		reservationDTO.setGuestDTO(convertGuestEntityToDTO(reservation.getGuest()));
+		reservationDTO.setRooms(convertRoomEntityListToDTO(new ArrayList<>(reservation.getRooms())));
+		reservationDTO.setHotelId(reservation.getHotel().getId());
+
+		return reservationDTO;
+	}
+
+	public static List<ReservationDTO> convertReservationEnitityListToDTO(List<Reservation> reservations) {
+		List<ReservationDTO> reservationDTOs = new ArrayList<>();
+
+		reservations.forEach((reservation) -> {
+			ReservationDTO reservationDTO = convertReservationEntityToDTO(reservation);
+			reservationDTOs.add(reservationDTO);
+		});
+
+		return reservationDTOs;
+	}
+
+	public static GuestDTO convertGuestEntityToDTO(Guest guest) {
+
+		GuestDTO guestDTO = new GuestDTO(guest.getId(), guest.getFirstname(), guest.getLastname(), guest.getMobile(),
+				guest.getEmail(), guest.getAddress().getAddress(), guest.getAddress().getSuburb(),
+				guest.getAddress().getState().toString(), guest.getAddress().getCountry().toString(),
+				guest.getAddress().getPostcode());
+
+		return guestDTO;
+	}
+
+	public static List<GuestDTO> convertGuestEntityListToDTO(List<Guest> guests) {
+		List<GuestDTO> guestDTOs = new ArrayList<>();
+		guests.forEach((guest) -> {
+			GuestDTO guestDTO = convertGuestEntityToDTO(guest);
+			guestDTOs.add(guestDTO);
+		});
+		return guestDTOs;
 	}
 
 }
