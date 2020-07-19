@@ -71,17 +71,17 @@ public class RoomServiceImpl implements RoomService {
 		 * Check if room status id and room type is null. Important as the id in the
 		 * DTOs are not validated by Spring validation
 		 */
-		if (roomDTO.getRoomStatusDTO().getId() == null || roomDTO.getRoomTypeDTO().getId() == null) {
+		if (roomDTO.getRoomStatus().getId() == null || roomDTO.getRoomType().getId() == null) {
 			// TODO Create custom exception to handle this case
 			throw new Exception("Field id is null");
 		}
 
-		logger.info("Database call to get room status for id = " + roomDTO.getRoomStatusDTO().getId());
-		RoomStatus status = roomStatusRepository.getOne(roomDTO.getRoomStatusDTO().getId());
+		logger.info("Database call to get room status for id = " + roomDTO.getRoomStatus().getId());
+		RoomStatus status = roomStatusRepository.getOne(roomDTO.getRoomStatus().getId());
 		room.setStatus(status);
 
-		logger.info("Database call to get room type for id = " + roomDTO.getRoomTypeDTO().getId());
-		RoomType type = roomTypeRepository.getOne(roomDTO.getRoomTypeDTO().getId());
+		logger.info("Database call to get room type for id = " + roomDTO.getRoomType().getId());
+		RoomType type = roomTypeRepository.getOne(roomDTO.getRoomType().getId());
 		room.setType(type);
 
 		logger.info("Database call to save room");
@@ -101,17 +101,17 @@ public class RoomServiceImpl implements RoomService {
 		 * Check if room status id and room type is null. Important as the id in the
 		 * DTOs are not validated by Spring validation
 		 */
-		if (roomDTO.getRoomStatusDTO().getId() == null || roomDTO.getRoomTypeDTO().getId() == null) {
+		if (roomDTO.getRoomStatus().getId() == null || roomDTO.getRoomType().getId() == null) {
 			// TODO Create custom exception to handle this case
 			throw new Exception("Field id is null");
 		}
 
-		logger.info("Database call to get room status for id = " + roomDTO.getRoomStatusDTO().getId());
-		RoomStatus status = roomStatusRepository.getOne(roomDTO.getRoomStatusDTO().getId());
+		logger.info("Database call to get room status for id = " + roomDTO.getRoomStatus().getId());
+		RoomStatus status = roomStatusRepository.getOne(roomDTO.getRoomStatus().getId());
 		room.setStatus(status);
 
-		logger.info("Database call to get room type for id = " + roomDTO.getRoomTypeDTO().getId());
-		RoomType type = roomTypeRepository.getOne(roomDTO.getRoomTypeDTO().getId());
+		logger.info("Database call to get room type for id = " + roomDTO.getRoomType().getId());
+		RoomType type = roomTypeRepository.getOne(roomDTO.getRoomType().getId());
 		room.setType(type);
 
 		logger.info("Database call to save room");

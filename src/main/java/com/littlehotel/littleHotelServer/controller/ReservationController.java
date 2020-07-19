@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.littlehotel.littleHotelServer.entity.Guest;
 import com.littlehotel.littleHotelServer.entity.Reservation;
 import com.littlehotel.littleHotelServer.model.ReservationDTO;
 import com.littlehotel.littleHotelServer.service.impl.ReservationServiceImpl;
@@ -39,6 +39,9 @@ public class ReservationController {
 	@Autowired
 	private ReservationServiceImpl reservationService;
 
+	@Autowired
+	private ModelMapper mapper;
+
 	/**
 	 * Method to get all reservations by user with role ADMIN
 	 * 
@@ -49,7 +52,7 @@ public class ReservationController {
 	public ResponseEntity<?> all() {
 		logger.info("Request to retrieve all reservations");
 		List<Reservation> reservations = reservationService.getAllReservations();
-		return ResponseEntity.ok().body(Utils.convertReservationEnitityListToDTO(reservations));
+		return ResponseEntity.ok().body(Utils.convertReservationEnitityListToDTO(reservations, mapper));
 	}
 
 	@GetMapping(value = "/reservations/{id}")
@@ -57,8 +60,8 @@ public class ReservationController {
 	public ResponseEntity<?> get(@PathVariable("id") Long id) {
 		logger.info("Request to retrieve reservation by id = " + id);
 		Reservation reservation = reservationService.getReservationById(id);
-		return ResponseEntity.ok().body(Utils.convertReservationEntityToDTO(reservation));
-		
+		return ResponseEntity.ok().body(Utils.convertReservationEntityToDTO(reservation, mapper));
+
 	}
 
 	/**
@@ -73,11 +76,8 @@ public class ReservationController {
 
 		Reservation reservation = reservationService.createReservation(reservationDTO);
 
-		return ResponseEntity.ok().body(Utils.convertReservationEntityToDTO(reservation));
+		return ResponseEntity.ok().body(Utils.convertReservationEntityToDTO(reservation, mapper));
 
 	}
-	
-	
-	
 
 }

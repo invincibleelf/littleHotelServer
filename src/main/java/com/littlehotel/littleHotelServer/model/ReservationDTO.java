@@ -41,18 +41,15 @@ public class ReservationDTO {
 	@Valid
 	@JsonProperty(value = "guest")
 	@NotNull
-	private GuestDTO guestDTO;
+	private GuestDTO guest;
 
 	@NotEmpty
 	private Set<Long> roomIds;
 
 	private List<RoomDTO> rooms;
-
-	public ReservationDTO(Long id, LocalDate dateFrom, LocalDate dateTo, Integer count) {
-		this.id = id;
-		this.dateFrom = dateFrom;
-		this.dateTo = dateTo;
-		this.count = count;
+	
+	public ReservationDTO() {
+		
 	}
 
 	public Long getId() {
@@ -103,12 +100,12 @@ public class ReservationDTO {
 		this.hotelId = hotelId;
 	}
 
-	public GuestDTO getGuestDTO() {
-		return guestDTO;
+	public GuestDTO getGuest() {
+		return guest;
 	}
 
-	public void setGuestDTO(GuestDTO guestDTO) {
-		this.guestDTO = guestDTO;
+	public void setGuest(GuestDTO guest) {
+		this.guest = guest;
 	}
 
 	public Set<Long> getRoomIds() {

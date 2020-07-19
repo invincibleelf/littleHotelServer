@@ -72,19 +72,23 @@ public class ReservationServiceImpl implements ReservationService {
 		Set<Room> rooms = new HashSet<>(roomRepository.findAllById(roomIds));
 		reservation.setRooms(rooms);
 
-		GuestDTO guestDTO = reservationDTO.getGuestDTO();
+		GuestDTO guestDTO = reservationDTO.getGuest();
 
 		Optional<?> optional = guestRepository.findByEmail(guestDTO.getEmail());
 
 		if (optional.isEmpty()) {
-			Address address = new Address(guestDTO.getAddress(), guestDTO.getSuburb(), guestDTO.getPostcode());
-			address.setState(EnumStates.valueOf(guestDTO.getState()));
-			address.setCountry(EnumCountry.valueOf(guestDTO.getCountry()));
+			Address address = new Address(guestDTO.getAddress().getAddress(), guestDTO.getAddress().getSuburb(),
+					guestDTO.getAddress().getPostcode());
+			address.setState(EnumStates.valueOf(guestDTO.getAddress().getState()));
+			address.setCountry(EnumCountry.valueOf(guestDTO.getAddress().getCountry()));
+
 			logger.info("Request database to save address");
 			addressRepository.save(address);
+
 			Guest guest = new Guest(guestDTO.getFirstname(), guestDTO.getLastname(), guestDTO.getMobile(),
 					guestDTO.getEmail(), address);
 			logger.info("Request database to save guest");
+			
 			guestRepository.save(guest);
 			reservation.setGuest(guest);
 		} else {

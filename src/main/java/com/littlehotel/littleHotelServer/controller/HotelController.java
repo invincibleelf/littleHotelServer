@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,6 +43,9 @@ public class HotelController {
 	@Autowired
 	private HotelServiceImpl hotelService;
 
+	@Autowired
+	private ModelMapper mapper;
+
 	/**
 	 * API to retrieve list of all hotel informations
 	 * 
@@ -52,7 +56,7 @@ public class HotelController {
 		logger.info("Request to get list of hotels");
 
 		List<Hotel> hotels = hotelService.getAllHotels();
-		List<HotelDTO> hotelDTOs = Utils.convertHotelEntityListToHotelDTOList(hotels);
+		List<HotelDTO> hotelDTOs = Utils.convertHotelEntityListToHotelDTOList(hotels, mapper);
 
 		return ResponseEntity.ok().body(hotelDTOs);
 	}
@@ -68,7 +72,7 @@ public class HotelController {
 		logger.info("Request to get hotel with id " + id);
 
 		Hotel hotel = hotelService.getHotelById(id);
-		HotelDTO hotelDTO = Utils.convertHotelEntityToHotelDTO(hotel);
+		HotelDTO hotelDTO = Utils.convertHotelEntityToHotelDTO(hotel, mapper);
 
 		return ResponseEntity.ok().body(hotelDTO);
 	}
@@ -89,7 +93,7 @@ public class HotelController {
 
 		Hotel hotel = hotelService.createHotel(hotelDTO);
 
-		return ResponseEntity.ok().body(Utils.convertHotelEntityToHotelDTO(hotel));
+		return ResponseEntity.ok().body(Utils.convertHotelEntityToHotelDTO(hotel, mapper));
 
 	}
 
@@ -109,7 +113,7 @@ public class HotelController {
 
 		Hotel hotel = hotelService.updateHotel(id, hotelDTO);
 
-		return ResponseEntity.ok().body(Utils.convertHotelEntityToHotelDTO(hotel));
+		return ResponseEntity.ok().body(Utils.convertHotelEntityToHotelDTO(hotel, mapper));
 	}
 
 	/**
