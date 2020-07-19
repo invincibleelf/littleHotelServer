@@ -56,10 +56,8 @@ public class ReservationController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> get(@PathVariable("id") Long id) {
 		logger.info("Request to retrieve reservation by id = " + id);
-//		Reservation reservation = reservationService.getReservationById(id);
-//		return ResponseEntity.ok().body(Utils.convertReservationEntityToDTO(reservation));
-		Guest guest = reservationService.getTest("test@gmail.com");
-		return ResponseEntity.ok().body(Utils.convertGuestEntityToDTO(guest));
+		Reservation reservation = reservationService.getReservationById(id);
+		return ResponseEntity.ok().body(Utils.convertReservationEntityToDTO(reservation));
 		
 	}
 
@@ -78,5 +76,8 @@ public class ReservationController {
 		return ResponseEntity.ok().body(Utils.convertReservationEntityToDTO(reservation));
 
 	}
+	
+	
+	
 
 }
