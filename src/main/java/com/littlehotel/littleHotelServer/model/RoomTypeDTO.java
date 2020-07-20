@@ -1,6 +1,9 @@
 package com.littlehotel.littleHotelServer.model;
 
+import java.math.BigDecimal;
+
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 public class RoomTypeDTO {
@@ -12,6 +15,10 @@ public class RoomTypeDTO {
 	private String type;
 
 	private String description;
+	
+	@NotNull
+	@Positive
+	private BigDecimal rate;
 
 	public RoomTypeDTO() {
 
@@ -39,6 +46,14 @@ public class RoomTypeDTO {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public BigDecimal getRate() {
+		return rate;
+	}
+
+	public void setRate(BigDecimal rate) {
+		this.rate = rate;
 	}
 
 }

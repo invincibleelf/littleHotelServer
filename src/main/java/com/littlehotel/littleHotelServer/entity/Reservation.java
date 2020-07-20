@@ -32,7 +32,9 @@ public class Reservation {
 
 	private LocalDate dateTo;
 
-	private Integer count;
+	private Integer adult;
+
+	private Integer child;
 
 	@Enumerated(EnumType.STRING)
 	private EnumBookingStatus status;
@@ -53,10 +55,11 @@ public class Reservation {
 
 	}
 
-	public Reservation(LocalDate dateFrom, LocalDate dateTo, Integer count, EnumBookingStatus status) {
+	public Reservation(LocalDate dateFrom, LocalDate dateTo, Integer adult, Integer child, EnumBookingStatus status) {
 		this.dateFrom = dateFrom;
 		this.dateTo = dateTo;
-		this.count = count;
+		this.adult = adult;
+		this.child = child;
 		this.status = status;
 	}
 
@@ -84,12 +87,20 @@ public class Reservation {
 		this.dateTo = dateTo;
 	}
 
-	public Integer getCount() {
-		return count;
+	public Integer getAdult() {
+		return adult;
 	}
 
-	public void setCount(Integer count) {
-		this.count = count;
+	public void setAdult(Integer adult) {
+		this.adult = adult;
+	}
+
+	public Integer getChild() {
+		return child;
+	}
+
+	public void setChild(Integer child) {
+		this.child = child;
 	}
 
 	public EnumBookingStatus getStatus() {

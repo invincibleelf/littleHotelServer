@@ -1,5 +1,8 @@
 package com.littlehotel.littleHotelServer.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -7,6 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -26,6 +30,9 @@ public class RoomStatus {
 	private EnumRoomStatus status;
 
 	private String description;
+
+	@OneToMany(targetEntity = Room.class, mappedBy = "status", cascade = CascadeType.ALL)
+	private List<Room> rooms;
 
 	public RoomStatus() {
 
@@ -54,6 +61,14 @@ public class RoomStatus {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public List<Room> getRooms() {
+		return rooms;
+	}
+
+	public void setRooms(List<Room> rooms) {
+		this.rooms = rooms;
 	}
 
 }

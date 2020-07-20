@@ -63,7 +63,7 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public Reservation createReservation(ReservationDTO reservationDTO) {
 		Reservation reservation = new Reservation(reservationDTO.getDateFrom(), reservationDTO.getDateTo(),
-				reservationDTO.getCount(), EnumBookingStatus.ACTIVE);
+				reservationDTO.getAdult(), reservationDTO.getChild(), EnumBookingStatus.ACTIVE);
 
 		Hotel hotel = HotelRepository.getOne(reservationDTO.getHotelId());
 		reservation.setHotel(hotel);
@@ -88,7 +88,7 @@ public class ReservationServiceImpl implements ReservationService {
 			Guest guest = new Guest(guestDTO.getFirstname(), guestDTO.getLastname(), guestDTO.getMobile(),
 					guestDTO.getEmail(), address);
 			logger.info("Request database to save guest");
-			
+
 			guestRepository.save(guest);
 			reservation.setGuest(guest);
 		} else {

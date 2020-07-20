@@ -1,6 +1,5 @@
 package com.littlehotel.littleHotelServer.entity;
 
-import java.math.BigDecimal;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -33,9 +32,6 @@ public class Room {
 
 	private String description;
 
-	@Column(precision = 10, scale = 2, nullable = false)
-	private BigDecimal rate;
-
 	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Hotel.class)
 	@JoinColumn(name = "hotel_id", referencedColumnName = "id")
 	private Hotel hotel;
@@ -55,11 +51,10 @@ public class Room {
 
 	}
 
-	public Room(String name, String number, String description, BigDecimal rate) {
+	public Room(String name, String number, String description) {
 		this.name = name;
 		this.number = number;
 		this.description = description;
-		this.rate = rate;
 	}
 
 	public String getName() {
@@ -84,14 +79,6 @@ public class Room {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public BigDecimal getRate() {
-		return rate;
-	}
-
-	public void setRate(BigDecimal rate) {
-		this.rate = rate;
 	}
 
 	public Hotel getHotel() {

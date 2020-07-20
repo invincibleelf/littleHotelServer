@@ -32,7 +32,10 @@ public class ReservationDTO {
 
 	@Positive
 	@NotNull
-	private Integer count = 1;
+	private Integer adult = 1;
+
+	@Positive
+	private Integer child = 1;
 
 	@Positive
 	@NotNull
@@ -47,9 +50,9 @@ public class ReservationDTO {
 	private Set<Long> roomIds;
 
 	private List<RoomDTO> rooms;
-	
+
 	public ReservationDTO() {
-		
+
 	}
 
 	public Long getId() {
@@ -84,12 +87,20 @@ public class ReservationDTO {
 		this.dateTo = dateTo;
 	}
 
-	public Integer getCount() {
-		return count;
+	public Integer getAdult() {
+		return adult;
 	}
 
-	public void setCount(Integer count) {
-		this.count = count;
+	public void setAdult(Integer adult) {
+		this.adult = adult;
+	}
+
+	public Integer getChild() {
+		return child;
+	}
+
+	public void setChild(Integer child) {
+		this.child = child;
 	}
 
 	public Long getHotelId() {

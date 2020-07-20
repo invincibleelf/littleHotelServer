@@ -61,7 +61,7 @@ public class RoomServiceImpl implements RoomService {
 
 	@Override
 	public Room createRoom(RoomDTO roomDTO) throws Exception {
-		Room room = new Room(roomDTO.getName(), roomDTO.getNumber(), roomDTO.getDescription(), roomDTO.getRate());
+		Room room = new Room(roomDTO.getName(), roomDTO.getNumber(), roomDTO.getDescription());
 
 		logger.info("Database call to get hotel for id = " + roomDTO.getHotelId());
 		Hotel hotel = hotelRepository.getOne(roomDTO.getHotelId());
@@ -95,7 +95,6 @@ public class RoomServiceImpl implements RoomService {
 		room.setName(roomDTO.getName());
 		room.setNumber(roomDTO.getNumber());
 		room.setDescription(roomDTO.getDescription());
-		room.setRate(roomDTO.getRate());
 
 		/*
 		 * Check if room status id and room type is null. Important as the id in the
@@ -160,7 +159,8 @@ public class RoomServiceImpl implements RoomService {
 
 	@Override
 	public RoomType createRoomType(RoomTypeDTO roomTypeDTO) {
-		RoomType roomType = new RoomType(EnumRoomType.valueOf(roomTypeDTO.getType()), roomTypeDTO.getDescription());
+		RoomType roomType = new RoomType(EnumRoomType.valueOf(roomTypeDTO.getType()), roomTypeDTO.getDescription(),
+				roomTypeDTO.getRate());
 
 		logger.info("Save room status");
 		return roomTypeRepository.save(roomType);
@@ -171,6 +171,7 @@ public class RoomServiceImpl implements RoomService {
 		RoomType roomType = roomTypeRepository.getOne(id);
 		roomType.setType(EnumRoomType.valueOf(roomTypeDTO.getType()));
 		roomType.setDescription(roomTypeDTO.getDescription());
+		roomType.setRate(roomTypeDTO.getRate());
 
 		logger.info("Update room type with id = " + id);
 		return roomTypeRepository.save(roomType);
