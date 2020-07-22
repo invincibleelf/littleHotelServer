@@ -12,15 +12,9 @@ public class RoomStatusDTO {
 	private String status;
 
 	private String description;
-	
+
 	public RoomStatusDTO() {
-		
-	}
-	
-	public RoomStatusDTO(Long id, String status, String description) {
-		this.id= id;
-		this.status = status;
-		this.description = description;
+
 	}
 
 	public Long getId() {
@@ -47,5 +41,4 @@ public class RoomStatusDTO {
 		this.description = description;
 	}
 
-	
 }

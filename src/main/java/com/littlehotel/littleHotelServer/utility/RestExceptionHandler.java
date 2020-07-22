@@ -93,6 +93,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage(), e.getRejectedValue());
 		return new ResponseEntity<Object>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
+	
+	@ExceptionHandler(AvailableRoomLessThanBookedException.class)
+	public ResponseEntity<?> availableRoomLessThanBooked(AvailableRoomLessThanBookedException e){
+		ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST,e.getMessage(),e.getRejectedType());
+		return new ResponseEntity<Object>(errorResponse,HttpStatus.BAD_REQUEST);
+	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> invalidCredential(Exception e) {

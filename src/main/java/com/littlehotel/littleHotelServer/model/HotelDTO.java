@@ -1,10 +1,9 @@
 package com.littlehotel.littleHotelServer.model;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-
-import com.sun.istack.NotNull;
-
+import javax.validation.constraints.NotNull;
 
 /**
  * DTO to manage Hotel Information
@@ -22,20 +21,9 @@ public class HotelDTO {
 	@NotBlank
 	private String code;
 
-	@NotBlank
-	private String address;
-
-	@NotBlank
-	private String suburb;
-
-	@NotBlank
-	private String state;
-
-	@NotBlank
-	private String country;
-
+	@Valid
 	@NotNull
-	private Integer postcode;
+	private AddressDTO address;
 
 	// TODO Add Regex validation for mobile phone
 	@NotNull
@@ -73,44 +61,12 @@ public class HotelDTO {
 		this.code = code;
 	}
 
-	public String getAddress() {
+	public AddressDTO getAddress() {
 		return address;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(AddressDTO address) {
 		this.address = address;
-	}
-
-	public String getSuburb() {
-		return suburb;
-	}
-
-	public void setSuburb(String suburb) {
-		this.suburb = suburb;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public Integer getPostcode() {
-		return postcode;
-	}
-
-	public void setPostcode(Integer postcode) {
-		this.postcode = postcode;
 	}
 
 	public Integer getPhoneNumber() {

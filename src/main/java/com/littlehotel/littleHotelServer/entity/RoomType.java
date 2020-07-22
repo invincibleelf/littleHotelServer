@@ -1,5 +1,9 @@
 package com.littlehotel.littleHotelServer.entity;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -7,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -26,14 +31,21 @@ public class RoomType {
 	private EnumRoomType type;
 
 	private String description;
+	
+	@Column(nullable = false, precision = 10, scale = 2)
+	private BigDecimal rate;
+	
+	@OneToMany(targetEntity = Room.class, mappedBy = "type", cascade = CascadeType.ALL)
+	private List<Room> rooms;
 
 	public RoomType() {
 
 	}
 	
-	public RoomType(EnumRoomType type, String description) {
+	public RoomType(EnumRoomType type, String description,BigDecimal rate) {
 		this.type = type;
 		this.description = description;
+		this.rate = rate;
 	}
 
 	public EnumRoomType getType() {
@@ -55,6 +67,24 @@ public class RoomType {
 	public Long getId() {
 		return id;
 	}
+	
+	public BigDecimal getRate() {
+		return rate;
+	}
+
+	public void setRate(BigDecimal rate) {
+		this.rate = rate;
+	}
+
+	public List<Room> getRooms() {
+		return rooms;
+	}
+
+	public void setRooms(List<Room> rooms) {
+		this.rooms = rooms;
+	}
+
+
 	
 
 

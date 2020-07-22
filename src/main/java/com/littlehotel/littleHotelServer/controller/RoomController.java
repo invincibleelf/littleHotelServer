@@ -11,6 +11,7 @@ import javax.validation.constraints.Positive;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +55,9 @@ public class RoomController {
 	@Autowired
 	private RoomService roomService;
 
+	@Autowired
+	private ModelMapper mapper;
+
 	/**
 	 * Method to retrieve all rooms by filter parameter status
 	 * 
@@ -74,10 +78,10 @@ public class RoomController {
 		// TODO Improve This
 		if (params.isEmpty()) {
 			rooms = roomService.getRooms();
-			return ResponseEntity.ok().body(Utils.convertRoomEntityListToDTO(rooms));
+			return ResponseEntity.ok().body(Utils.convertRoomEntityListToDTO(rooms, mapper));
 		} else if (params.containsKey("status")) {
 			rooms = roomService.getRoomsByStatus(status);
-			return ResponseEntity.ok().body(Utils.convertRoomEntityListToDTO(rooms));
+			return ResponseEntity.ok().body(Utils.convertRoomEntityListToDTO(rooms, mapper));
 
 		} else {
 			return ResponseEntity.badRequest()
@@ -99,7 +103,7 @@ public class RoomController {
 
 		Room room = roomService.getRoomById(id);
 
-		return ResponseEntity.ok().body(Utils.convertRoomEntityToDTO(room));
+		return ResponseEntity.ok().body(Utils.convertRoomEntityToDTO(room, mapper));
 	}
 
 	/**
@@ -118,7 +122,7 @@ public class RoomController {
 
 		Room room = roomService.createRoom(roomDTO);
 
-		return ResponseEntity.ok().body(room);
+		return ResponseEntity.ok().body(Utils.convertRoomEntityToDTO(room, mapper));
 	}
 
 	/**
@@ -140,7 +144,7 @@ public class RoomController {
 
 		Room room = roomService.updateRoom(id, roomDTO);
 
-		return ResponseEntity.ok().body(Utils.convertRoomEntityToDTO(room));
+		return ResponseEntity.ok().body(Utils.convertRoomEntityToDTO(room, mapper));
 
 	}
 
@@ -156,7 +160,7 @@ public class RoomController {
 
 		List<RoomType> roomTypes = roomService.getRoomTypes();
 
-		return ResponseEntity.ok().body(Utils.convertRoomTypeEntityListToDTO(roomTypes));
+		return ResponseEntity.ok().body(Utils.convertRoomTypeEntityListToDTO(roomTypes, mapper));
 	}
 
 	/**
@@ -172,7 +176,7 @@ public class RoomController {
 
 		RoomType roomType = roomService.getRoomTypeById(id);
 
-		return ResponseEntity.ok().body(Utils.convertRoomTypeEntityToDTO(roomType));
+		return ResponseEntity.ok().body(Utils.convertRoomTypeEntityToDTO(roomType, mapper));
 	}
 
 	/**
@@ -189,7 +193,7 @@ public class RoomController {
 
 		RoomType roomType = roomService.createRoomType(roomTypeDTO);
 
-		return ResponseEntity.ok().body(Utils.convertRoomTypeEntityToDTO(roomType));
+		return ResponseEntity.ok().body(Utils.convertRoomTypeEntityToDTO(roomType, mapper));
 	}
 
 	@PutMapping(value = "/room-type/{id}", produces = "application/json")
@@ -200,7 +204,7 @@ public class RoomController {
 
 		RoomType roomType = roomService.updateRoomType(id, roomTypeDTO);
 
-		return ResponseEntity.ok().body(Utils.convertRoomTypeEntityToDTO(roomType));
+		return ResponseEntity.ok().body(Utils.convertRoomTypeEntityToDTO(roomType, mapper));
 	}
 
 	@GetMapping(value = "/room-status", produces = "application/json")
@@ -210,7 +214,7 @@ public class RoomController {
 
 		List<RoomStatus> roomStatuses = roomService.getRoomStatuses();
 
-		return ResponseEntity.ok().body(Utils.convertRoomStatusEntityListToDTO(roomStatuses));
+		return ResponseEntity.ok().body(Utils.convertRoomStatusEntityListToDTO(roomStatuses, mapper));
 	}
 
 	@GetMapping(value = "/room-status/{id}", produces = "application/json")
@@ -219,7 +223,7 @@ public class RoomController {
 		logger.info("Request to get room Status by id = " + id);
 
 		RoomStatus roomStatus = roomService.getRoomStatusById(id);
-		return ResponseEntity.ok().body(Utils.convertRoomStatusEntityToDTO(roomStatus));
+		return ResponseEntity.ok().body(Utils.convertRoomStatusEntityToDTO(roomStatus, mapper));
 	}
 
 	@PostMapping(value = "/room-status", produces = "application/json")
@@ -230,7 +234,7 @@ public class RoomController {
 
 		RoomStatus roomStatus = roomService.createRoomStatus(roomStatusDTO);
 
-		return ResponseEntity.ok().body(Utils.convertRoomStatusEntityToDTO(roomStatus));
+		return ResponseEntity.ok().body(Utils.convertRoomStatusEntityToDTO(roomStatus, mapper));
 	}
 
 	@PutMapping(value = "/room-status/{id}", produces = "application/json")
@@ -239,7 +243,7 @@ public class RoomController {
 			@Valid @RequestBody RoomStatusDTO roomStatusDTO) {
 		logger.info("Request to update room status with id = " + id);
 		RoomStatus roomStatus = roomService.updateRoomStatus(id, roomStatusDTO);
-		return ResponseEntity.ok().body(Utils.convertRoomStatusEntityToDTO(roomStatus));
+		return ResponseEntity.ok().body(Utils.convertRoomStatusEntityToDTO(roomStatus, mapper));
 	}
 
 }

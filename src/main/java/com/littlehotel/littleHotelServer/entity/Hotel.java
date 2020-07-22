@@ -1,17 +1,21 @@
 package com.littlehotel.littleHotelServer.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Table(name = "hotels")
 public class Hotel {
 
@@ -32,20 +36,26 @@ public class Hotel {
 
 	private String email;
 
+	@OneToMany(targetEntity = Reservation.class, mappedBy = "hotel", cascade = CascadeType.ALL)
+	private List<Reservation> reservations;
+
+	@OneToMany(targetEntity = Room.class, mappedBy = "hotel", cascade = CascadeType.ALL)
+	private List<Room> rooms;
+
 	public Hotel() {
 
 	}
 
 	public Hotel(String name, String code, Integer phoneNumber, String email) {
 		this.name = name;
-		this.code= code;
+		this.code = code;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 	}
 
 	public Hotel(String name, String code, Integer phoneNumber, String email, Address address) {
 		this.name = name;
-		this.code= code;
+		this.code = code;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.address = address;
@@ -93,6 +103,22 @@ public class Hotel {
 
 	public Long getId() {
 		return id;
+	}
+
+	public List<Reservation> getReservations() {
+		return reservations;
+	}
+
+	public void setReservations(List<Reservation> reservations) {
+		this.reservations = reservations;
+	}
+
+	public List<Room> getRooms() {
+		return rooms;
+	}
+
+	public void setRooms(List<Room> rooms) {
+		this.rooms = rooms;
 	}
 
 }

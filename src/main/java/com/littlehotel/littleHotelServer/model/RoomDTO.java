@@ -1,13 +1,9 @@
 package com.littlehotel.littleHotelServer.model;
 
-import java.math.BigDecimal;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RoomDTO {
 
@@ -25,33 +21,19 @@ public class RoomDTO {
 
 	@NotNull
 	@Positive
-	private BigDecimal rate;
-
-	@NotNull
-	@Positive
 	private Long hotelId;
 
 	private String hotelName;
 
 	@Valid
 	@NotNull
-	@JsonProperty("roomStatus")
-	private RoomStatusDTO roomStatusDTO;
+	private RoomStatusDTO roomStatus;
 
 	@Valid
 	@NotNull
-	@JsonProperty("roomType")
-	private RoomTypeDTO roomTypeDTO;
+	private RoomTypeDTO roomType;
 
 	public RoomDTO() {
-	}
-
-	public RoomDTO(Long id, String name, String number, String description, BigDecimal rate) {
-		this.id = id;
-		this.name = name;
-		this.number = number;
-		this.description = description;
-		this.rate = rate;
 	}
 
 	public String getName() {
@@ -78,13 +60,6 @@ public class RoomDTO {
 		this.description = description;
 	}
 
-	public BigDecimal getRate() {
-		return rate;
-	}
-
-	public void setRate(BigDecimal rate) {
-		this.rate = rate;
-	}
 
 	public Long getHotelId() {
 		return hotelId;
@@ -102,20 +77,20 @@ public class RoomDTO {
 		this.hotelName = hotelName;
 	}
 
-	public RoomStatusDTO getRoomStatusDTO() {
-		return roomStatusDTO;
+	public RoomStatusDTO getRoomStatus() {
+		return roomStatus;
 	}
 
-	public void setRoomStatusDTO(RoomStatusDTO roomStatusDTO) {
-		this.roomStatusDTO = roomStatusDTO;
+	public void setRoomStatus(RoomStatusDTO roomStatus) {
+		this.roomStatus = roomStatus;
 	}
 
-	public RoomTypeDTO getRoomTypeDTO() {
-		return roomTypeDTO;
+	public RoomTypeDTO getRoomType() {
+		return roomType;
 	}
 
-	public void setRoomTypeDTO(RoomTypeDTO roomTypeDTO) {
-		this.roomTypeDTO = roomTypeDTO;
+	public void setRoomType(RoomTypeDTO roomType) {
+		this.roomType = roomType;
 	}
 
 	public Long getId() {
