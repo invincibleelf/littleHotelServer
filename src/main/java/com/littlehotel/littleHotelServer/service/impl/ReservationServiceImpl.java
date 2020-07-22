@@ -1,5 +1,6 @@
 package com.littlehotel.littleHotelServer.service.impl;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,6 +19,7 @@ import com.littlehotel.littleHotelServer.constants.EnumBookingStatus;
 import com.littlehotel.littleHotelServer.constants.EnumRoomStatus;
 import com.littlehotel.littleHotelServer.entity.Guest;
 import com.littlehotel.littleHotelServer.entity.Hotel;
+import com.littlehotel.littleHotelServer.entity.Invoice;
 import com.littlehotel.littleHotelServer.entity.Reservation;
 import com.littlehotel.littleHotelServer.entity.Room;
 import com.littlehotel.littleHotelServer.entity.RoomType;
@@ -26,6 +28,7 @@ import com.littlehotel.littleHotelServer.model.ReservationDTO;
 import com.littlehotel.littleHotelServer.model.RoomTypeDTO;
 import com.littlehotel.littleHotelServer.repository.GuestRepository;
 import com.littlehotel.littleHotelServer.repository.HotelRepository;
+import com.littlehotel.littleHotelServer.repository.InvoiceRepository;
 import com.littlehotel.littleHotelServer.repository.ReservationRepository;
 import com.littlehotel.littleHotelServer.repository.RoomRepository;
 import com.littlehotel.littleHotelServer.repository.RoomTypeRepository;
@@ -55,6 +58,9 @@ public class ReservationServiceImpl implements ReservationService {
 	@Autowired
 	private RoomTypeRepository roomTypeRepository;
 
+	@Autowired
+	private InvoiceRepository invoiceRepository;
+
 	@Override
 	public List<Reservation> getAllReservations() {
 		return reservationRepository.findAll();
@@ -76,7 +82,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 		List<Map<String, Long>> roomTypeCountMapList = reservationDTO.getRoomTypeCountMapList();
 		List<Room> bookedRooms = new ArrayList<Room>();
-
+		BigDecimal amount = BigDecimal.ZERO;
 		for (Map<String, Long> map : roomTypeCountMapList) {
 			Long roomTypeId = map.get("roomTypeId");
 			RoomType roomType = roomTypeRepository.getOne(roomTypeId);
@@ -88,6 +94,7 @@ public class ReservationServiceImpl implements ReservationService {
 					roomType.getType());
 
 			Long count = map.get("count");
+
 			/*
 			 * Check if the available rooms is greater than requested booking Add the
 			 * required number to the reservation which are at first in the list If not
@@ -96,13 +103,14 @@ public class ReservationServiceImpl implements ReservationService {
 			if (availableRooms.size() >= count) {
 				for (int j = 0; j < count; j++) {
 					bookedRooms.add(availableRooms.get(j));
+					amount = amount.add(availableRooms.get(j).getType().getRate());
 				}
 			} else {
 				throw new AvailableRoomLessThanBookedException("Available Room of type " + roomType.getType().name()
 						+ " is less that booked count of " + count, roomTypeId.toString());
 			}
 		}
-
+		System.out.print(amount);
 		reservation.setRooms(new HashSet<>(bookedRooms));
 
 		GuestDTO guestDTO = reservationDTO.getGuest();
@@ -118,7 +126,18 @@ public class ReservationServiceImpl implements ReservationService {
 			reservation.setGuest((Guest) optional.get());
 		}
 
-		return reservationRepository.save(reservation);
+		logger.info("Request database to save reservation");
+		reservationRepository.save(reservation);
+
+		// Create Invoice after creating reservation
+		Invoice invoice = new Invoice();
+		invoice.setAmount(amount);
+		invoice.setGuest(reservation.getGuest());
+		invoice.setReservation(reservation);
+		logger.info("Request database to save invoice");
+		invoiceRepository.save(invoice);
+
+		return reservation;
 	}
 
 	@Transactional
