@@ -2,14 +2,14 @@ package com.littlehotel.littleHotelServer.model;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.FutureOrPresent;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -34,8 +34,8 @@ public class ReservationDTO {
 	@NotNull
 	private Integer adult = 1;
 
-	@Positive
-	private Integer child = 1;
+	@PositiveOrZero
+	private Integer child = 0;
 
 	@Positive
 	@NotNull
@@ -46,8 +46,7 @@ public class ReservationDTO {
 	@NotNull
 	private GuestDTO guest;
 
-	@NotEmpty
-	private Set<Long> roomIds;
+	private List<Map<String, Long>> roomTypeCountMapList;
 
 	private List<RoomDTO> rooms;
 
@@ -119,20 +118,20 @@ public class ReservationDTO {
 		this.guest = guest;
 	}
 
-	public Set<Long> getRoomIds() {
-		return roomIds;
-	}
-
-	public void setRoomIds(Set<Long> roomIds) {
-		this.roomIds = roomIds;
-	}
-
 	public List<RoomDTO> getRooms() {
 		return rooms;
 	}
 
 	public void setRooms(List<RoomDTO> rooms) {
 		this.rooms = rooms;
+	}
+
+	public List<Map<String, Long>> getRoomTypeCountMapList() {
+		return roomTypeCountMapList;
+	}
+
+	public void setRoomTypeCountMapList(List<Map<String, Long>> roomTypeCountMapList) {
+		this.roomTypeCountMapList = roomTypeCountMapList;
 	}
 
 }

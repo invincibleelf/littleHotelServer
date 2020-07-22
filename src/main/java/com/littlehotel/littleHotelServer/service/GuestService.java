@@ -3,6 +3,7 @@ package com.littlehotel.littleHotelServer.service;
 import java.util.List;
 
 import com.littlehotel.littleHotelServer.entity.Guest;
+import com.littlehotel.littleHotelServer.model.GuestDTO;
 
 public interface GuestService {
 
@@ -10,7 +11,7 @@ public interface GuestService {
 	
 	Guest getGuestById(Long id);
 	
-	Guest createGuest();
+	Guest createGuest(GuestDTO guestDTO);
 	
-	Guest updateGuest();
+	Guest updateGuest(Long id, GuestDTO guestDTO);
 }
