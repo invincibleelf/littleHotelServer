@@ -57,6 +57,13 @@
 			<version>2.3.8</version>
 		</dependency>
 
+	<!-- Dependency for stripe payment  -->
+		<dependency>
+			<groupId>com.stripe</groupId>
+			<artifactId>stripe-java</artifactId>
+			<version>19.33.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>

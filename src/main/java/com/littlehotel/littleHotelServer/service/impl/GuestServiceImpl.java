@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.littlehotel.littleHotelServer.constants.EnumCountry;
 import com.littlehotel.littleHotelServer.constants.EnumStates;
@@ -38,6 +39,7 @@ public class GuestServiceImpl implements GuestService {
 	}
 
 	@Override
+	@Transactional
 	public Guest createGuest(GuestDTO guestDTO) {
 
 		Address address = new Address(guestDTO.getAddress().getAddress(), guestDTO.getAddress().getSuburb(),
@@ -56,6 +58,7 @@ public class GuestServiceImpl implements GuestService {
 	}
 
 	@Override
+	@Transactional
 	public Guest updateGuest(Long id, GuestDTO guestDTO) {
 		Guest guest = guestRepository.getOne(id);
 		guest.setFirstname(guestDTO.getFirstname());

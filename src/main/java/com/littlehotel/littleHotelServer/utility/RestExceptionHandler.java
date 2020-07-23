@@ -17,6 +17,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.littlehotel.littleHotelServer.model.ErrorResponse;
+import com.stripe.exception.InvalidRequestException;
 
 /**
  * Handler class for Exception thrown at controller during request handling
@@ -98,6 +99,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<?> availableRoomLessThanBooked(AvailableRoomLessThanBookedException e){
 		ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST,e.getMessage(),e.getRejectedType());
 		return new ResponseEntity<Object>(errorResponse,HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(InvalidRequestException.class)
+	public ResponseEntity<?> invalidRequestStripe(InvalidRequestException e) {
+		ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage(),e.getParam());
+		return new ResponseEntity<Object>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(Exception.class)

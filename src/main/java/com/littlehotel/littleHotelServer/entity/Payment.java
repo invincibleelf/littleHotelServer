@@ -30,7 +30,7 @@ public class Payment {
 	@Column(nullable = false)
 	private EnumPaymentType type;
 	
-	private Long payId;
+	private String payId;
 
 	public Invoice getInvoice() {
 		return invoice;
@@ -56,11 +56,11 @@ public class Payment {
 		this.type = type;
 	}
 
-	public Long getPayId() {
+	public String getPayId() {
 		return payId;
 	}
 
-	public void setPayId(Long payId) {
+	public void setPayId(String payId) {
 		this.payId = payId;
 	}
 

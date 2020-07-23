@@ -8,18 +8,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.littlehotel.littleHotelServer.constants.EnumBookingStatus;
+import com.littlehotel.littleHotelServer.constants.EnumPaymentType;
 import com.littlehotel.littleHotelServer.constants.EnumRoomStatus;
 import com.littlehotel.littleHotelServer.entity.Guest;
 import com.littlehotel.littleHotelServer.entity.Hotel;
 import com.littlehotel.littleHotelServer.entity.Invoice;
+import com.littlehotel.littleHotelServer.entity.Payment;
 import com.littlehotel.littleHotelServer.entity.Reservation;
 import com.littlehotel.littleHotelServer.entity.Room;
 import com.littlehotel.littleHotelServer.entity.RoomType;
@@ -34,6 +35,7 @@ import com.littlehotel.littleHotelServer.repository.RoomRepository;
 import com.littlehotel.littleHotelServer.repository.RoomTypeRepository;
 import com.littlehotel.littleHotelServer.service.ReservationService;
 import com.littlehotel.littleHotelServer.utility.AvailableRoomLessThanBookedException;
+import com.stripe.exception.StripeException;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -42,6 +44,9 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Autowired
 	private GuestServiceImpl guestService;
+
+	@Autowired
+	private PaymentServiceImpl paymentService;
 
 	@Autowired
 	private ReservationRepository reservationRepository;
@@ -73,7 +78,8 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Transactional
 	@Override
-	public Reservation createReservation(ReservationDTO reservationDTO) throws AvailableRoomLessThanBookedException {
+	public Reservation createReservation(ReservationDTO reservationDTO)
+			throws AvailableRoomLessThanBookedException, StripeException {
 		Reservation reservation = new Reservation(reservationDTO.getDateFrom(), reservationDTO.getDateTo(),
 				reservationDTO.getAdult(), reservationDTO.getChild(), EnumBookingStatus.ACTIVE);
 
@@ -110,10 +116,12 @@ public class ReservationServiceImpl implements ReservationService {
 						+ " is less that booked count of " + count, roomTypeId.toString());
 			}
 		}
-		System.out.print(amount);
 		reservation.setRooms(new HashSet<>(bookedRooms));
 
 		GuestDTO guestDTO = reservationDTO.getGuest();
+
+		Payment payment = paymentService.createPayment(guestDTO.getEmail(), amount.intValue(),
+				reservationDTO.getStripeToken(), EnumPaymentType.valueOf(reservationDTO.getPaymentType()));
 
 		logger.info("Request database to get Guest with email " + guestDTO.getEmail());
 		Optional<?> optional = guestRepository.findByEmail(guestDTO.getEmail());
@@ -134,6 +142,8 @@ public class ReservationServiceImpl implements ReservationService {
 		invoice.setAmount(amount);
 		invoice.setGuest(reservation.getGuest());
 		invoice.setReservation(reservation);
+		invoice.setPayment(payment);
+
 		logger.info("Request database to save invoice");
 		invoiceRepository.save(invoice);
 
