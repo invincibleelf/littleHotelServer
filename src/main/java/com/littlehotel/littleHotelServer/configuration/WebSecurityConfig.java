@@ -1,5 +1,7 @@
 package com.littlehotel.littleHotelServer.configuration;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +16,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /*
  * @author Sharad Shrestha
@@ -55,9 +60,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 
 		// No need of CSRF
-		httpSecurity.csrf().disable()
+		httpSecurity.csrf().disable().cors().and()
 				// Permit Request that doesn't need authorization
-				.authorizeRequests().antMatchers("/api/auth/authenticate", "/api/auth/register","/api/auth/verify").permitAll().
+				.authorizeRequests()
+				.antMatchers("/api/auth/authenticate", "/api/auth/register", "/api/auth/verify", "/api/auth/test")
+				.permitAll().
 				// All other request that need authentication
 				anyRequest().authenticated().and().
 				// Make sure to use stateless session;
@@ -69,4 +76,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		httpSecurity.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+		configuration.setAllowedMethods(Arrays.asList("*"));
+		configuration.setAllowedHeaders(Arrays.asList("*"));
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
 }

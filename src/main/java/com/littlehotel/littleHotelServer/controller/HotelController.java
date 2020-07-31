@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.littlehotel.littleHotelServer.entity.Hotel;
 import com.littlehotel.littleHotelServer.model.HotelDTO;
+import com.littlehotel.littleHotelServer.model.MessageResponse;
 import com.littlehotel.littleHotelServer.service.impl.HotelServiceImpl;
 import com.littlehotel.littleHotelServer.utility.Utils;
 
@@ -126,7 +127,7 @@ public class HotelController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
 		logger.info("Request to delete hotel with id = " + id);
-		return null;
+		return ResponseEntity.ok().body(new MessageResponse("Delete method unimpleted"));
 
 	}
 }
