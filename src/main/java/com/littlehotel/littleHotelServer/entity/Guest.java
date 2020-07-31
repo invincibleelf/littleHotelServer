@@ -39,6 +39,9 @@ public class Guest {
 
 	@OneToMany(targetEntity = Reservation.class, mappedBy = "guest", cascade = CascadeType.ALL)
 	private List<Reservation> reservations;
+	
+	@OneToMany(targetEntity = Invoice.class,mappedBy = "guest",cascade = CascadeType.ALL)
+	private List<Invoice> invoices; 
 
 	public Guest() {
 
@@ -109,6 +112,14 @@ public class Guest {
 
 	public void setReservations(List<Reservation> reservations) {
 		this.reservations = reservations;
+	}
+
+	public List<Invoice> getInvoices() {
+		return invoices;
+	}
+
+	public void setInvoices(List<Invoice> invoices) {
+		this.invoices = invoices;
 	}
 
 }

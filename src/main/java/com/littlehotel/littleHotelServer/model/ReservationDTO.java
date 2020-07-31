@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.validation.Valid;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
@@ -49,6 +50,12 @@ public class ReservationDTO {
 	private List<Map<String, Long>> roomTypeCountMapList;
 
 	private List<RoomDTO> rooms;
+	
+	@NotBlank
+	private String stripeToken;
+	
+	@NotBlank
+	private String paymentType;
 
 	public ReservationDTO() {
 
@@ -132,6 +139,22 @@ public class ReservationDTO {
 
 	public void setRoomTypeCountMapList(List<Map<String, Long>> roomTypeCountMapList) {
 		this.roomTypeCountMapList = roomTypeCountMapList;
+	}
+
+	public String getStripeToken() {
+		return stripeToken;
+	}
+
+	public void setStripeToken(String stripeToken) {
+		this.stripeToken = stripeToken;
+	}
+
+	public String getPaymentType() {
+		return paymentType;
+	}
+
+	public void setPaymentType(String paymentType) {
+		this.paymentType = paymentType;
 	}
 
 }

@@ -175,7 +175,7 @@ public class Utils {
 	}
 
 	public static ReservationDTO convertReservationEntityToDTO(Reservation reservation, ModelMapper mapper) {
-		
+
 		ReservationDTO reservationDTO = mapper.map(reservation, ReservationDTO.class);
 
 		return reservationDTO;
@@ -207,5 +207,4 @@ public class Utils {
 		});
 		return guestDTOs;
 	}
-
 }

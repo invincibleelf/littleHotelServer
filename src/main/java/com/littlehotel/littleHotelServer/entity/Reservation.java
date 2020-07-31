@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.littlehotel.littleHotelServer.constants.EnumBookingStatus;
@@ -50,6 +51,9 @@ public class Reservation {
 	@ManyToOne(targetEntity = Guest.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "guest_id", referencedColumnName = "id")
 	private Guest guest;
+	
+	@OneToOne(mappedBy = "reservation")
+	private Invoice invoice;
 
 	public Reservation() {
 
@@ -137,6 +141,14 @@ public class Reservation {
 
 	public Long getId() {
 		return id;
+	}
+
+	public Invoice getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(Invoice invoice) {
+		this.invoice = invoice;
 	}
 
 }
