@@ -1,11 +1,14 @@
 package com.littlehotel.littleHotelServer.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,9 +21,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.littlehotel.littleHotelServer.entity.ApplicationUser;
+import com.littlehotel.littleHotelServer.model.ApplicationUserDTO;
 import com.littlehotel.littleHotelServer.model.MessageResponse;
 import com.littlehotel.littleHotelServer.model.PasswordDTO;
 import com.littlehotel.littleHotelServer.service.UserService;
+import com.littlehotel.littleHotelServer.utility.Utils;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -31,6 +37,25 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
+	private ModelMapper mapper;
+	
+	
+	/** Constructor injection of {@link ModelMapper} mapper to add additional mapping to skip fields
+	 * @param mapper
+	 */
+	public  UserController(ModelMapper mapper) {
+		this.mapper = mapper;
+		
+		TypeMap<ApplicationUser, ApplicationUserDTO> typemap = this.mapper.createTypeMap(ApplicationUser.class, ApplicationUserDTO.class);
+		
+		//Skip setting password field which is set to null
+		typemap.addMappings(m -> m.skip(ApplicationUserDTO::setPassword));
+		
+		//Skip setting roles as its needs converting of ApplicationRole to string value
+		typemap.addMappings(m -> m.skip(ApplicationUserDTO::setRoles));
+		
+	}
 
 	/*
 	 * API to retrieve list of all application users informations by current user
@@ -45,7 +70,8 @@ public class UserController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> all() {
 		logger.info("Get Users");
-		return ResponseEntity.ok(userService.getUsers());
+		List<ApplicationUser> users = userService.getUsers();
+		return ResponseEntity.ok().body(Utils.convertApplicationUserEntityListToDTO(users, mapper));
 
 	}
 
@@ -61,8 +87,8 @@ public class UserController {
 	@GetMapping(value = "/users/{id}", produces = "application/json")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> getUser(@PathVariable Long id) {
-
-		return ResponseEntity.ok(userService.getUserById(id));
+		ApplicationUser user = userService.getUserById(id);
+		return ResponseEntity.ok().body(Utils.convertApplicationUserEntityToDTO(user, mapper));
 	}
 
 	/*

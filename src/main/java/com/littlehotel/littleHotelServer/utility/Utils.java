@@ -1,18 +1,22 @@
 package com.littlehotel.littleHotelServer.utility;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 
+import com.littlehotel.littleHotelServer.entity.ApplicationUser;
 import com.littlehotel.littleHotelServer.entity.Guest;
 import com.littlehotel.littleHotelServer.entity.Hotel;
 import com.littlehotel.littleHotelServer.entity.Reservation;
 import com.littlehotel.littleHotelServer.entity.Room;
 import com.littlehotel.littleHotelServer.entity.RoomStatus;
 import com.littlehotel.littleHotelServer.entity.RoomType;
+import com.littlehotel.littleHotelServer.model.ApplicationUserDTO;
 import com.littlehotel.littleHotelServer.model.ErrorResponse;
 import com.littlehotel.littleHotelServer.model.GuestDTO;
 import com.littlehotel.littleHotelServer.model.HotelDTO;
@@ -156,7 +160,6 @@ public class Utils {
 	 * @param mapper the {@link ModelMapper} used for conversion
 	 * @return
 	 */
-
 	public static RoomDTO convertRoomEntityToDTO(Room room, ModelMapper mapper) {
 
 		RoomDTO roomDTO = mapper.map(room, RoomDTO.class);
@@ -206,5 +209,35 @@ public class Utils {
 			guestDTOs.add(guestDTO);
 		});
 		return guestDTOs;
+	}
+	
+	/**
+	 * Convert {@link ApplicationUser} Entity Object to the respective {@link ApplicationUserDTO}
+	 * object
+	 * 
+	 * @param room
+	 * @param mapper the {@link ModelMapper} used for conversion
+	 * @return
+	 */
+	public static ApplicationUserDTO convertApplicationUserEntityToDTO (ApplicationUser user, ModelMapper mapper) {
+		
+		ApplicationUserDTO userDTO = mapper.map(user, ApplicationUserDTO.class);
+		
+		//Get roles name and convert it to string
+		Set<String> roles = new HashSet<>();
+		user.getRoles().forEach((role )->{
+			roles.add(role.getName().name());
+		});
+		userDTO.setRoles(roles);
+		return userDTO;
+	}
+	
+	public static List<ApplicationUserDTO> convertApplicationUserEntityListToDTO (List<ApplicationUser> users, ModelMapper mapper){
+		List<ApplicationUserDTO> userDTOs = new ArrayList<>();
+		users.forEach((user)->{
+			ApplicationUserDTO userDTO = convertApplicationUserEntityToDTO(user, mapper);
+			userDTOs.add(userDTO);
+		});
+		return userDTOs;
 	}
 }

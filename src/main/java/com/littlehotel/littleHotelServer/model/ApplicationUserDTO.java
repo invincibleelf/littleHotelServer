@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 public class ApplicationUserDTO {
+	
+	private Long id;
 
 	@Email
 	@NotEmpty
@@ -23,6 +25,14 @@ public class ApplicationUserDTO {
 	@NotNull
 	private Integer mobile;
 	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getUsername() {
 		return username;
 	}
