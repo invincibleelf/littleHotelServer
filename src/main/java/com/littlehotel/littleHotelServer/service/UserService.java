@@ -3,6 +3,7 @@ package com.littlehotel.littleHotelServer.service;
 import java.util.List;
 
 import com.littlehotel.littleHotelServer.entity.ApplicationUser;
+import com.littlehotel.littleHotelServer.model.ApplicationUserDTO;
 import com.littlehotel.littleHotelServer.model.PasswordDTO;
 
 /*
@@ -21,5 +22,11 @@ public interface UserService {
 	public Boolean checkUserExists(String username);
 
 	void changePassword(PasswordDTO passwordDTO, String username) throws Exception;
+
+	public ApplicationUser createUser(ApplicationUserDTO applicationUserDTO) throws Exception;
+	
+	public ApplicationUser updateUser(Long id, ApplicationUserDTO applicationUserDTO);
+
+	
 
 }

@@ -15,7 +15,6 @@ public class ApplicationUserDTO {
 	@NotEmpty
 	private String username;
 	
-	@NotEmpty
 	@Pattern(regexp = "^(?=.*[0-9])(?=.[a-z]).{6,32}")
 	private String password;
 	
@@ -24,6 +23,8 @@ public class ApplicationUserDTO {
 	// TODO Add regex validation for mobile phone	
 	@NotNull
 	private Integer mobile;
+	
+	private String status;
 	
 	public Long getId() {
 		return id;
@@ -63,6 +64,14 @@ public class ApplicationUserDTO {
 
 	public void setMobile(Integer mobile) {
 		this.mobile = mobile;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }

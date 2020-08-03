@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -89,6 +90,25 @@ public class UserController {
 	public ResponseEntity<?> getUser(@PathVariable Long id) {
 		ApplicationUser user = userService.getUserById(id);
 		return ResponseEntity.ok().body(Utils.convertApplicationUserEntityToDTO(user, mapper));
+	}
+	
+	@PostMapping(value="/users", produces = "application/json")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> createUser(@Valid @RequestBody ApplicationUserDTO applicationUserDTO) throws Exception{
+		
+		ApplicationUser applicationUser = userService.createUser(applicationUserDTO);
+		
+		return ResponseEntity.ok().body(Utils.convertApplicationUserEntityToDTO(applicationUser, mapper));
+	}
+	
+	@PutMapping(value = "/users/{id}", produces = "application/json")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> updateUser(@PathVariable("id") Long id,@Valid @RequestBody ApplicationUserDTO applicationUserDTO){
+		logger.info("Request to update user with id = " + id);
+		
+		ApplicationUser applicationUser = userService.updateUser(id,applicationUserDTO);
+		
+		return ResponseEntity.ok().body(Utils.convertApplicationUserEntityToDTO(applicationUser, mapper));
 	}
 
 	/*
