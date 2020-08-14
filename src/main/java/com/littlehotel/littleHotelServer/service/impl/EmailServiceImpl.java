@@ -19,6 +19,9 @@ public class EmailServiceImpl {
 
 	@Value("${spring.mail.username}")
 	private String serverEmail;
+	
+	@Value("${mail.verificationapi}")
+	private String verificationApiUrl;
 
 	private static final Logger logger = LogManager.getLogger(EmailServiceImpl.class);
 
@@ -36,8 +39,8 @@ public class EmailServiceImpl {
 			helper.setTo(applicationUser.getUsername());
 			helper.setSubject("Verify Email");
 			// TODO ISSUE EXISTS WHILE TRYING TO SEND :colon in anchor html			
-			helper.setText("Dear " + applicationUser.getUsername() + ",<br/>Click "
-					+ "<a href='localhost/api/auth/verify?token=" + token + "' target='_blank'>here</a>",
+			helper.setText("Dear " + applicationUser.getUsername() + ",<br/>Please verify your email with link <br/> "
+					+ this.verificationApiUrl + token,
 					true);
 			logger.info("Sending Email to " + applicationUser.getUsername());
 			emailSender.send(message);

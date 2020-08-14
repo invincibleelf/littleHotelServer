@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api")
 public class MainController {
 
-	@GetMapping(value = "/helloUser")
-	@PreAuthorize("hasRole('USER')")
+	@GetMapping(value = "/auth/test")
 	public String helloUser() {
 		return "Email Sent";
 	}

@@ -12,7 +12,7 @@
 	<groupId>com.littlehotel</groupId>
 	<artifactId>littleHotelServer</artifactId>
 	<version>v1</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>littleHotelServer</name>
 	<description>Rest API for little hotel</description>
 
@@ -57,7 +57,7 @@
 			<version>2.3.8</version>
 		</dependency>
 
-	<!-- Dependency for stripe payment  -->
+		<!-- Dependency for stripe payment -->
 		<dependency>
 			<groupId>com.stripe</groupId>
 			<artifactId>stripe-java</artifactId>
@@ -86,6 +86,30 @@
 			</exclusions>
 		</dependency>
 	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>beanstalk</id>
+			<build>
+				<finalName>${project.name}</finalName>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<excludes>
+								<exclude>**/cloud/config/*.java</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 	<build>
 		<plugins>
