@@ -8,8 +8,6 @@ import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,8 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.littlehotel.littleHotelServer.entity.Reservation;
 import com.littlehotel.littleHotelServer.model.ReservationDTO;
 import com.littlehotel.littleHotelServer.model.RoomTypeDTO;
-import com.littlehotel.littleHotelServer.service.impl.ReservationServiceImpl;
-import com.littlehotel.littleHotelServer.utility.Utils;
+import com.littlehotel.littleHotelServer.service.ReservationService;
 
 /**
  * API Controller to handle request related with reservations
@@ -37,37 +32,31 @@ import com.littlehotel.littleHotelServer.utility.Utils;
  *
  */
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/reservations")
 @Validated
-public class ReservationController {
+public class ReservationController extends GenericRestController<ReservationService, ReservationDTO, Reservation>{
 
 	private final static Logger logger = LogManager.getLogger(ReservationController.class);
-
-	@Autowired
-	private ReservationServiceImpl reservationService;
-
-	@Autowired
-	private ModelMapper mapper;
 
 	/**
 	 * Method to get all reservations by user with role ADMIN
 	 * 
 	 * @return {@link ResponseEntity}
 	 */
-	@GetMapping(value = "/reservations")
+	@Override
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> all() {
 		logger.info("Request to retrieve all reservations");
-		List<Reservation> reservations = reservationService.getAllReservations();
-		return ResponseEntity.ok().body(Utils.convertReservationEnitityListToDTO(reservations, mapper));
+		return ResponseEntity.ok().body(super.all());
 	}
 
-	@GetMapping(value = "/reservations/{id}")
+	@Override
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> get(@PathVariable("id") Long id) {
+		
 		logger.info("Request to retrieve reservation by id = " + id);
-		Reservation reservation = reservationService.getReservationById(id);
-		return ResponseEntity.ok().body(Utils.convertReservationEntityToDTO(reservation, mapper));
+		
+		return ResponseEntity.ok().body(super.get(id));
 
 	}
 
@@ -78,34 +67,30 @@ public class ReservationController {
 	 * @return
 	 * @throws Exception
 	 */
-	@PostMapping(value = "/reservations", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<?> createReservation(@Valid @RequestBody ReservationDTO reservationDTO) throws Exception {
+	@Override
+	public ResponseEntity<?> create(@Valid @RequestBody ReservationDTO reservationDTO) throws Exception {
 		logger.info("Request to create reservation");
-
-		Reservation reservation = reservationService.createReservation(reservationDTO);
-
-		return ResponseEntity.ok().body(Utils.convertReservationEntityToDTO(reservation, mapper));
+		
+		return ResponseEntity.ok().body(service.create(reservationDTO));
 
 	}
 
-	@PutMapping(value = "/reservations/{id}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<?> updateReservation(@PathVariable("id") Long id,
-			@Valid @RequestBody ReservationDTO reservationDTO) {
+	@Override
+	public ResponseEntity<?> update(@PathVariable("id") Long id,
+			@Valid @RequestBody ReservationDTO reservationDTO) throws Exception {
 		logger.info("Request to update reservation with id = " + id);
 
-		Reservation reservation = reservationService.updateReservation(id, reservationDTO);
-
-		return ResponseEntity.ok().body(Utils.convertReservationEntityToDTO(reservation, mapper));
+		return ResponseEntity.ok().body(service.update(id, reservationDTO));
 
 	}
 
-	@GetMapping(value = "/reservations/check-rates")
+	@GetMapping(value = "/check-rates")
 	public ResponseEntity<?> getAvailableRoomRates(
 			@RequestParam("dateFrom") @DateTimeFormat(iso = ISO.DATE) LocalDate dateFrom,
 			@RequestParam("dateTo") @DateTimeFormat(iso = ISO.DATE) LocalDate dateTo,
 			@RequestParam("hotelId") Long hotelId, HttpServletRequest request) {
 
-		List<RoomTypeDTO> availableRoomTypeDTOs = reservationService.getAvailableRoomTypesAndRoomCount(dateFrom, dateTo,
+		List<RoomTypeDTO> availableRoomTypeDTOs = ((ReservationService) service).getAvailableRoomTypesAndRoomCount(dateFrom, dateTo,
 				hotelId);
 
 		return ResponseEntity.ok().body(availableRoomTypeDTOs);
