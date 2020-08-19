@@ -1,24 +1,32 @@
 package com.littlehotel.littleHotelServer.service;
 
-import java.util.List;
+import org.springframework.stereotype.Service;
 
 import com.littlehotel.littleHotelServer.entity.Hotel;
 import com.littlehotel.littleHotelServer.model.HotelDTO;
 
-/**
- * @author Sharad Shrestha
- *
- */
-public interface HotelService {
+@Service
+public class HotelService extends GenericService<HotelDTO, Hotel> {
 
-	List<Hotel> getAllHotels();
+	@Override
+	public HotelDTO create(HotelDTO dto) throws Exception {
+		Hotel hotel = mapperUtil.mapModel(dto, entityClass);
+		repository.save(hotel);
+		return mapperUtil.mapModel(hotel, dtoClass);
+	}
 
-	Hotel getHotelById(Long id);
+	@Override
+	public HotelDTO update(Long id, HotelDTO dto) {
+		Hotel hotel = repository.getOne(id);
+		mapperUtil.mapModel(dto,hotel);
+		repository.save(hotel);
+		return mapperUtil.mapModel(hotel, dtoClass) ;
+	}
 
-	Hotel createHotel(HotelDTO hotelDTO);
-
-	Hotel updateHotel(Long id, HotelDTO hotelDTO);
-
-	void deleteHotelById(Long id);
+	@Override
+	public void delete(Long id) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

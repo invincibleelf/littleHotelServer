@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -19,7 +20,8 @@ public class Hotel extends BaseEntity {
 	@Column(nullable = false)
 	private String name;
 
-	@OneToOne(targetEntity = Address.class)
+	@OneToOne(targetEntity = Address.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "address_id")
 	private Address address;
 
 	private Integer phoneNumber;

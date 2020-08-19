@@ -26,10 +26,10 @@ import com.littlehotel.littleHotelServer.utility.PasswordMismatchException;
 
 @Service
 public class UserService extends GenericService<ApplicationUserDTO, ApplicationUser> {
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private RoleRepository roleRepository;
 
@@ -44,17 +44,17 @@ public class UserService extends GenericService<ApplicationUserDTO, ApplicationU
 
 	@Override
 	public ApplicationUserDTO create(ApplicationUserDTO dto) throws Exception {
-		ApplicationUser applicationUser = mapperUtil.mapModel(dto,super.entityClass);
+		ApplicationUser applicationUser = mapperUtil.mapModel(dto, super.entityClass);
 		applicationUser.setPassword(bcryptEncoder.encode(dto.getPassword()));
 		applicationUser.setStatus(EnumAppUserStatus.CREATED);
-		
+
 		Set<ApplicationRoleDTO> userRoles = dto.getRoles();
 		Set<ApplicationRole> roles = new HashSet<>();
 
 		if (userRoles == null) {
 			throw new Exception("Error:Role not found");
 		}
-		
+
 		setUserRoles(userRoles, roles);
 
 		applicationUser.setRoles(roles);
@@ -65,9 +65,9 @@ public class UserService extends GenericService<ApplicationUserDTO, ApplicationU
 
 		// TODO Use scheduler to Send Email as Jobs and Email Template
 		emailService.sendEmailVerificationMessage(applicationUser, verificationToken.getToken());
-		
+
 		return mapperUtil.mapModel(applicationUser, super.dtoClass);
-		
+
 	}
 
 	@Override
@@ -76,15 +76,15 @@ public class UserService extends GenericService<ApplicationUserDTO, ApplicationU
 		applicationUser.setMobile(dto.getMobile());
 		Set<ApplicationRoleDTO> userRoles = dto.getRoles();
 		Set<ApplicationRole> roles = new HashSet<>();
-		
-		if(userRoles !=null) {
+
+		if (userRoles != null) {
 			setUserRoles(userRoles, roles);
 		}
-		
+
 		applicationUser.setRoles(roles);
-		
+
 		return mapperUtil.mapModel(repository.save(applicationUser), dtoClass);
-		
+
 	}
 
 	@Override
@@ -92,11 +92,11 @@ public class UserService extends GenericService<ApplicationUserDTO, ApplicationU
 		ApplicationUser applicationUser = repository.getOne(id);
 		applicationUser.setStatus(EnumAppUserStatus.DELETED);
 		repository.save(applicationUser);
-		
+
 	}
-	
+
 	public void changePassword(PasswordDTO passwordDTO, String username) throws PasswordMismatchException, Exception {
-		ApplicationUser applicationUser =  userRepository.findByStatusAndUsername(EnumAppUserStatus.VERIFIED, username)
+		ApplicationUser applicationUser = userRepository.findByStatusAndUsername(EnumAppUserStatus.VERIFIED, username)
 				.orElseThrow(() -> new UsernameNotFoundException("User doesn't Exists"));
 
 		if (bcryptEncoder.matches(passwordDTO.getOldPassword(), applicationUser.getPassword())) {
@@ -107,7 +107,7 @@ public class UserService extends GenericService<ApplicationUserDTO, ApplicationU
 		}
 
 	}
-	
+
 	public VerificationToken createVerificationToken(ApplicationUser user) {
 		String token = UUID.randomUUID().toString();
 		LocalDateTime expirationDate = LocalDateTime.now().plusDays(1);
@@ -117,13 +117,12 @@ public class UserService extends GenericService<ApplicationUserDTO, ApplicationU
 		verificationToken.setUser(user);
 		return verificationTokenRepository.save(verificationToken);
 	}
-	
+
 	public Boolean checkUserExists(String username) {
-		return ((UserRepository) repository).existsByUsername(username);
+		return userRepository.existsByUsername(username);
 
 	}
-	
-	
+
 	private void setUserRoles(Set<ApplicationRoleDTO> userRoles, Set<ApplicationRole> roles) {
 		userRoles.forEach(role -> {
 			ApplicationRole userRole = null;
