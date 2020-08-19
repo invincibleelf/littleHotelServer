@@ -38,7 +38,7 @@ public abstract class GenericRestController<S extends GenericService<D, E>, D ex
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<?> update(@PathVariable("id")Long id, @Valid @RequestBody D dto){
+	public ResponseEntity<?> update(@PathVariable("id")Long id, @Valid @RequestBody D dto) throws Exception{
 	
 		return ResponseEntity.ok().body(service.update(id, dto));
 	}

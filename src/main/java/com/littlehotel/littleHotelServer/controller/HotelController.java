@@ -58,11 +58,12 @@ public class HotelController extends GenericRestController<HotelService, HotelDT
 	 * @param hotelDTO
 	 * @param result
 	 * @return ResponseEntity
+	 * @throws Exception 
 	 * @see BindingResult
 	 */
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody HotelDTO hotelDTO) {
+	public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody HotelDTO hotelDTO) throws Exception {
 		logger.info("Request to update hotel with id = " + id);
 
 		return ResponseEntity.ok().body(service.update(id, hotelDTO));

@@ -72,7 +72,7 @@ public class UserController extends GenericRestController<UserService, Applicati
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> update(@PathVariable("id") Long id,
-			@Valid @RequestBody ApplicationUserDTO applicationUserDTO) {
+			@Valid @RequestBody ApplicationUserDTO applicationUserDTO) throws Exception {
 		logger.info("Request to update user with id = " + id);
 
 		return ResponseEntity.ok().body(service.update(id, applicationUserDTO));
