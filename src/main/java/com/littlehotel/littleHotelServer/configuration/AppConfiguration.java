@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import com.littlehotel.littleHotelServer.entity.ApplicationUser;
+import com.littlehotel.littleHotelServer.utility.GenericMapperUtil;
 
 /*
  * @author Sharad Shrestha
@@ -23,6 +24,11 @@ public class AppConfiguration {
 	@Bean
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
+	}
+	
+	@Bean
+	public GenericMapperUtil mapperUtil() {
+		return new GenericMapperUtil();
 	}
 
 }

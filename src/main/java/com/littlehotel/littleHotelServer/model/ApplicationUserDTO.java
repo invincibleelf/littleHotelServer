@@ -13,10 +13,11 @@ public class ApplicationUserDTO extends BaseDTO {
 	@NotEmpty
 	private String username;
 	
+	@NotEmpty
 	@Pattern(regexp = "^(?=.*[0-9])(?=.[a-z]).{6,32}")
 	private String password;
 	
-	private Set<String> roles;
+	private Set<ApplicationRoleDTO> roles;
 	
 	// TODO Add regex validation for mobile phone	
 	@NotNull
@@ -44,11 +45,11 @@ public class ApplicationUserDTO extends BaseDTO {
 		this.password = password;
 	}
 
-	public Set<String> getRoles() {
+	public Set<ApplicationRoleDTO> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Set<String> roles) {
+	public void setRoles(Set<ApplicationRoleDTO> roles) {
 		this.roles = roles;
 	}
 

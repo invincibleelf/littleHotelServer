@@ -1,7 +1,6 @@
 package com.littlehotel.littleHotelServer.controller;
 
 import java.security.Principal;
-import java.util.List;
 
 import javax.validation.Valid;
 
@@ -9,15 +8,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,21 +23,16 @@ import com.littlehotel.littleHotelServer.model.ApplicationUserDTO;
 import com.littlehotel.littleHotelServer.model.MessageResponse;
 import com.littlehotel.littleHotelServer.model.PasswordDTO;
 import com.littlehotel.littleHotelServer.service.UserService;
-import com.littlehotel.littleHotelServer.utility.Utils;
 
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/users")
 @Validated
-public class UserController {
+public class UserController extends GenericRestController<UserService, ApplicationUserDTO, ApplicationUser> {
 
 	private static final Logger logger = LogManager.getLogger(UserController.class);
-
-	@Autowired
-	private UserService userService;
 	
 	private ModelMapper mapper;
-	
-	
+
 	/** Constructor injection of {@link ModelMapper} mapper to add additional mapping to skip fields
 	 * @param mapper
 	 */
@@ -53,62 +44,38 @@ public class UserController {
 		//Skip setting password field which is set to null
 		typemap.addMappings(m -> m.skip(ApplicationUserDTO::setPassword));
 		
-		//Skip setting roles as its needs converting of ApplicationRole to string value
-		typemap.addMappings(m -> m.skip(ApplicationUserDTO::setRoles));
-		
 	}
 
-	/*
-	 * API to retrieve list of all application users informations by current user
-	 * with role ADMIN
-	 * 
-	 * @param none
-	 * 
-	 * @return ResponseEntity
-	 * 
-	 */
-	@GetMapping("/users")
+	@Override
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> all() {
-		logger.info("Get Users");
-		List<ApplicationUser> users = userService.getUsers();
-		return ResponseEntity.ok().body(Utils.convertApplicationUserEntityListToDTO(users, mapper));
+		logger.info("Request to get all user");
+		return super.all();
 
 	}
 
-	/*
-	 * API to retrieve Application user information by current user with role ADMIN
-	 * 
-	 * @param id ApplictionUser id
-	 * 
-	 * @return ResponseEntity ApplicationUser
-	 * 
-	 * 
-	 */
-	@GetMapping(value = "/users/{id}", produces = "application/json")
+	@Override
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> getUser(@PathVariable Long id) {
-		ApplicationUser user = userService.getUserById(id);
-		return ResponseEntity.ok().body(Utils.convertApplicationUserEntityToDTO(user, mapper));
+	public ResponseEntity<?> get(@PathVariable("id") Long id) {
+		logger.info("Request to get all user");
+		return super.get(id);
+
 	}
-	
-	@PostMapping(value="/users", produces = "application/json")
+
+	@Override
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> createUser(@Valid @RequestBody ApplicationUserDTO applicationUserDTO) throws Exception{
-		
-		ApplicationUser applicationUser = userService.createUser(applicationUserDTO);
-		
-		return ResponseEntity.ok().body(Utils.convertApplicationUserEntityToDTO(applicationUser, mapper));
+	public ResponseEntity<?> create(@Valid @RequestBody ApplicationUserDTO applicationUserDTO) throws Exception {
+		logger.info("Request to create user");
+		return super.create(applicationUserDTO);
 	}
-	
-	@PutMapping(value = "/users/{id}", produces = "application/json")
+
+	@Override
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> updateUser(@PathVariable("id") Long id,@Valid @RequestBody ApplicationUserDTO applicationUserDTO){
+	public ResponseEntity<?> update(@PathVariable("id") Long id,
+			@Valid @RequestBody ApplicationUserDTO applicationUserDTO) {
 		logger.info("Request to update user with id = " + id);
-		
-		ApplicationUser applicationUser = userService.updateUser(id,applicationUserDTO);
-		
-		return ResponseEntity.ok().body(Utils.convertApplicationUserEntityToDTO(applicationUser, mapper));
+
+		return ResponseEntity.ok().body(service.update(id, applicationUserDTO));
 	}
 
 	/*
@@ -124,17 +91,17 @@ public class UserController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> deleteUser(@PathVariable Long id) {
 		logger.info("Request delete user wiht id " + id);
-		userService.deleteUserById(id);
+		service.delete(id);
 		return ResponseEntity.ok().body(new MessageResponse("User Deleted Successfully"));
 	}
 
-	@PostMapping(value = "/users/change-password", produces = "application/json")
+	@PostMapping(value = "/change-password", produces = "application/json")
 	public ResponseEntity<?> changePassword(@Valid @RequestBody PasswordDTO passwordDTO, Principal principal)
 			throws Exception {
 		logger.info("Request change password for user " + principal.getName());
-		
-		userService.changePassword(passwordDTO, principal.getName());
-		
+
+		((UserService) service).changePassword(passwordDTO, principal.getName());
+
 		return ResponseEntity.ok().body(new MessageResponse("Password changed successfully"));
 
 	}
