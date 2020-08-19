@@ -7,9 +7,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-public class ApplicationUserDTO {
-	
-	private Long id;
+public class ApplicationUserDTO extends BaseDTO {
 
 	@Email
 	@NotEmpty
@@ -26,12 +24,8 @@ public class ApplicationUserDTO {
 	
 	private String status;
 	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+	public ApplicationUserDTO() {
+		
 	}
 
 	public String getUsername() {

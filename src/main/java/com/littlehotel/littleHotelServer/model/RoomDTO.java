@@ -5,10 +5,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-public class RoomDTO {
-
-	@Positive
-	private Long id;
+public class RoomDTO extends BaseDTO{
 
 	@NotEmpty
 	private String name;
@@ -91,14 +88,6 @@ public class RoomDTO {
 
 	public void setRoomType(RoomTypeDTO roomType) {
 		this.roomType = roomType;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 }

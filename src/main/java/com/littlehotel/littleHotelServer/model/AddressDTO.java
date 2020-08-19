@@ -3,7 +3,7 @@ package com.littlehotel.littleHotelServer.model;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 
-public class AddressDTO {
+public class AddressDTO extends BaseDTO{
 
 	private String address;
 

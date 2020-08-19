@@ -6,22 +6,16 @@ import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-public class InvoiceDTO {
-
-	private Long id;
+public class InvoiceDTO extends BaseDTO {
 
 	@Positive
 	@NotNull
 	private BigDecimal amount;
 
 	private LocalDateTime invoiceDateTime;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+	
+	public InvoiceDTO () {
+		
 	}
 
 	public BigDecimal getAmount() {

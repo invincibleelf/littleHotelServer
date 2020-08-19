@@ -8,9 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -22,12 +19,8 @@ import com.littlehotel.littleHotelServer.constants.EnumAppUserStatus;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-@Table(name = "user")
-public class ApplicationUser {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+@Table(name = "users")
+public class ApplicationUser extends BaseEntity{
 
 	@Column(nullable = false, unique = true)
 	private String username;
@@ -44,7 +37,7 @@ public class ApplicationUser {
 	private EnumAppUserStatus status;
 
 	@ManyToMany(fetch = FetchType.LAZY, targetEntity = ApplicationRole.class)
-	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<ApplicationRole> roles = new HashSet<>();
 
 	public ApplicationUser() {
@@ -55,14 +48,6 @@ public class ApplicationUser {
 		this.username = username;
 		this.password = password;
 		this.mobile = mobile;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getUsername() {

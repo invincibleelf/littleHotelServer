@@ -15,9 +15,7 @@ import javax.validation.constraints.PositiveOrZero;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ReservationDTO {
-
-	private Long id;
+public class ReservationDTO extends BaseDTO {
 
 	private LocalDate bookedDate = LocalDate.now();
 
@@ -59,14 +57,6 @@ public class ReservationDTO {
 
 	public ReservationDTO() {
 
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public LocalDate getBookedDate() {

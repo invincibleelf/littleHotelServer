@@ -9,10 +9,7 @@ import javax.validation.constraints.Positive;
 import com.littlehotel.littleHotelServer.constants.EnumRoomType;
 import com.littlehotel.littleHotelServer.repository.RoomRepository;
 
-public class RoomTypeDTO {
-
-	@Positive
-	private Long id;
+public class RoomTypeDTO extends BaseDTO {
 
 	@NotBlank
 	private String type;
@@ -35,7 +32,7 @@ public class RoomTypeDTO {
 	 * there as well.
 	 */
 	public RoomTypeDTO(Long id, EnumRoomType type, String description, BigDecimal rate, Long availableRooms) {
-		this.id = id;
+		super.setId(id);
 		this.type = type.name();
 		this.description = description;
 		this.rate = rate;
@@ -56,14 +53,6 @@ public class RoomTypeDTO {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public BigDecimal getRate() {

@@ -5,9 +5,6 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -18,12 +15,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "rooms")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class Room {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
+public class Room extends BaseEntity{
+	
 	@Column(nullable = false)
 	private String name;
 
@@ -103,10 +96,6 @@ public class Room {
 
 	public void setType(RoomType type) {
 		this.type = type;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 	public Set<Reservation> getReservations() {

@@ -3,10 +3,7 @@ package com.littlehotel.littleHotelServer.model;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
-public class RoomStatusDTO {
-
-	@Positive
-	private Long id;
+public class RoomStatusDTO extends BaseDTO {
 
 	@NotBlank
 	private String status;
@@ -15,14 +12,6 @@ public class RoomStatusDTO {
 
 	public RoomStatusDTO() {
 
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getStatus() {

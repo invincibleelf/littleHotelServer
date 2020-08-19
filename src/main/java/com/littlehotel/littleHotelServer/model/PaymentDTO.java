@@ -1,22 +1,12 @@
 package com.littlehotel.littleHotelServer.model;
 
-public class PaymentDTO {
-
-	private Long id;
+public class PaymentDTO extends BaseDTO {
 	
 	private String status;
 	
 	private String type;
 	
 	private Long payId;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getStatus() {
 		return status;

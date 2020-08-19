@@ -7,9 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -21,12 +18,8 @@ import com.littlehotel.littleHotelServer.constants.EnumBookingStatus;
 
 @Entity
 @Table(name = "reservations")
-public class Reservation {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-
+public class Reservation extends BaseEntity{
+	
 	private LocalDate bookedDate = LocalDate.now();
 
 	private LocalDate dateFrom;
@@ -137,10 +130,6 @@ public class Reservation {
 
 	public void setGuest(Guest guest) {
 		this.guest = guest;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 	public Invoice getInvoice() {

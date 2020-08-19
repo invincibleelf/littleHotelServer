@@ -7,9 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -19,11 +16,7 @@ import com.littlehotel.littleHotelServer.constants.EnumRoomStatus;
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Table(name = "rooms_status")
-public class RoomStatus {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+public class RoomStatus extends BaseEntity{
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, unique = true)
@@ -41,10 +34,6 @@ public class RoomStatus {
 	public RoomStatus(EnumRoomStatus status, String description) {
 		this.status = status;
 		this.description = description;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 	public EnumRoomStatus getStatus() {

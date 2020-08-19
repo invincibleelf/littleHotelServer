@@ -11,9 +11,7 @@ import javax.validation.constraints.NotNull;
  * @author Sharad Shrestha
  *
  */
-public class HotelDTO {
-
-	private Long id;
+public class HotelDTO extends BaseDTO {
 
 	@NotBlank
 	private String name;
@@ -35,14 +33,6 @@ public class HotelDTO {
 
 	public HotelDTO() {
 
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getName() {
