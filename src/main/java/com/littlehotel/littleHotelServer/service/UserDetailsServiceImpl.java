@@ -1,4 +1,4 @@
-package com.littlehotel.littleHotelServer.service.impl;
+package com.littlehotel.littleHotelServer.service;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -30,6 +30,7 @@ import com.littlehotel.littleHotelServer.model.ApplicationUserDTO;
 import com.littlehotel.littleHotelServer.repository.RoleRepository;
 import com.littlehotel.littleHotelServer.repository.UserRepository;
 import com.littlehotel.littleHotelServer.repository.VerificationTokenRepository;
+import com.littlehotel.littleHotelServer.service.impl.EmailServiceImpl;
 
 /*
  * @author Sharad Shrestha

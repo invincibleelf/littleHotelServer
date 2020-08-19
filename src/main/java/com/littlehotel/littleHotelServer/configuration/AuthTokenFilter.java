@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.littlehotel.littleHotelServer.service.impl.UserDetailsServiceImpl;
+import com.littlehotel.littleHotelServer.service.UserDetailsServiceImpl;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
