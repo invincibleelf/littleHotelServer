@@ -3,7 +3,6 @@ package com.littlehotel.littleHotelServer.repository;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +12,7 @@ import com.littlehotel.littleHotelServer.entity.Room;
 import com.littlehotel.littleHotelServer.model.RoomTypeDTO;
 
 @Repository
-public interface RoomRepository extends JpaRepository<Room, Long> {
+public interface RoomRepository extends GenericRepository<Room> {
 
 	@Query("Select r from Room r inner join r.status s where s.status=:status")
 	List<Room> findAllByStatus(EnumRoomStatus status);
