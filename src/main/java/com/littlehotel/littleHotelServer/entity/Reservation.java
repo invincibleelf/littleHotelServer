@@ -3,6 +3,7 @@ package com.littlehotel.littleHotelServer.entity;
 import java.time.LocalDate;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -41,11 +42,12 @@ public class Reservation extends BaseEntity{
 	@JoinTable(name = "reservations_rooms", joinColumns = @JoinColumn(name = "reservation_id"), inverseJoinColumns = @JoinColumn(name = "room_id"))
 	private Set<Room> rooms;
 
-	@ManyToOne(targetEntity = Guest.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Guest.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "guest_id", referencedColumnName = "id")
 	private Guest guest;
 	
-	@OneToOne(mappedBy = "reservation")
+	@OneToOne(targetEntity = Invoice.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "invoice_id", referencedColumnName = "id")
 	private Invoice invoice;
 
 	public Reservation() {

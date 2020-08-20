@@ -14,6 +14,8 @@ public class InvoiceDTO extends BaseDTO {
 
 	private LocalDateTime invoiceDateTime;
 	
+	private PaymentDTO payment;
+	
 	public InvoiceDTO () {
 		
 	}
@@ -32,6 +34,14 @@ public class InvoiceDTO extends BaseDTO {
 
 	public void setInvoiceDateTime(LocalDateTime invoiceDateTime) {
 		this.invoiceDateTime = invoiceDateTime;
+	}
+
+	public PaymentDTO getPayment() {
+		return payment;
+	}
+
+	public void setPayment(PaymentDTO payment) {
+		this.payment = payment;
 	}
 
 }

@@ -31,7 +31,6 @@ import com.littlehotel.littleHotelServer.repository.HotelRepository;
 import com.littlehotel.littleHotelServer.repository.InvoiceRepository;
 import com.littlehotel.littleHotelServer.repository.RoomRepository;
 import com.littlehotel.littleHotelServer.repository.RoomTypeRepository;
-import com.littlehotel.littleHotelServer.service.impl.PaymentServiceImpl;
 import com.littlehotel.littleHotelServer.utility.AvailableRoomLessThanBookedException;
 import com.stripe.exception.StripeException;
 
@@ -44,7 +43,7 @@ public class ReservationService extends GenericService<ReservationDTO, Reservati
 	private GuestService guestService;
 
 	@Autowired
-	private PaymentServiceImpl paymentService;
+	private PaymentService paymentService;
 
 	@Autowired
 	private HotelRepository hotelRepository;
@@ -118,18 +117,21 @@ public class ReservationService extends GenericService<ReservationDTO, Reservati
 			reservation.setGuest((Guest) optional.get());
 		}
 
-		logger.info("Request database to save reservation");
-		repository.save(reservation);
+		
 
 		// Create Invoice after creating reservation
 		Invoice invoice = new Invoice();
 		invoice.setAmount(amount);
 		invoice.setGuest(reservation.getGuest());
-		invoice.setReservation(reservation);
 		invoice.setPayment(payment);
 
 		logger.info("Request database to save invoice");
 		invoiceRepository.save(invoice);
+		
+		reservation.setInvoice(invoice);
+		
+		logger.info("Request database to save reservation");
+		repository.save(reservation);
 
 		return mapperUtil.mapModel(reservation, dtoClass);
 

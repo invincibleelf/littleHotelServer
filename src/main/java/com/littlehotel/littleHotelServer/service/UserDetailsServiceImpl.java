@@ -30,7 +30,6 @@ import com.littlehotel.littleHotelServer.model.ApplicationUserDTO;
 import com.littlehotel.littleHotelServer.repository.RoleRepository;
 import com.littlehotel.littleHotelServer.repository.UserRepository;
 import com.littlehotel.littleHotelServer.repository.VerificationTokenRepository;
-import com.littlehotel.littleHotelServer.service.impl.EmailServiceImpl;
 
 /*
  * @author Sharad Shrestha
@@ -55,7 +54,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	private VerificationTokenRepository verificationTokenRepository;
 
 	@Autowired
-	private EmailServiceImpl emailService;
+	private EmailService emailService;
 
 	@Override
 	@Transactional

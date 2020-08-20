@@ -21,7 +21,6 @@ import com.littlehotel.littleHotelServer.model.PasswordDTO;
 import com.littlehotel.littleHotelServer.repository.RoleRepository;
 import com.littlehotel.littleHotelServer.repository.UserRepository;
 import com.littlehotel.littleHotelServer.repository.VerificationTokenRepository;
-import com.littlehotel.littleHotelServer.service.impl.EmailServiceImpl;
 import com.littlehotel.littleHotelServer.utility.PasswordMismatchException;
 
 @Service
@@ -40,7 +39,7 @@ public class UserService extends GenericService<ApplicationUserDTO, ApplicationU
 	private VerificationTokenRepository verificationTokenRepository;
 
 	@Autowired
-	private EmailServiceImpl emailService;
+	private EmailService emailService;
 
 	@Override
 	public ApplicationUserDTO create(ApplicationUserDTO dto) throws Exception {

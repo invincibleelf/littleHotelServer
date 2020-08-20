@@ -25,8 +25,7 @@ public class Invoice extends BaseEntity {
 	@JoinColumn(name = "guest_id", referencedColumnName = "id")
 	private Guest guest;
 
-	@OneToOne(targetEntity = Reservation.class, cascade = CascadeType.ALL)
-	@JoinColumn(name = "reservation_id", referencedColumnName = "id")
+	@OneToOne(mappedBy = "invoice")
 	private Reservation reservation;
 
 	@OneToOne(targetEntity = Payment.class, cascade = CascadeType.ALL)

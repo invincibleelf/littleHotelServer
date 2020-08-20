@@ -54,6 +54,8 @@ public class ReservationDTO extends BaseDTO {
 	
 	@NotBlank
 	private String paymentType;
+	
+	private InvoiceDTO invoice;
 
 	public ReservationDTO() {
 
@@ -145,6 +147,14 @@ public class ReservationDTO extends BaseDTO {
 
 	public void setPaymentType(String paymentType) {
 		this.paymentType = paymentType;
+	}
+
+	public InvoiceDTO getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(InvoiceDTO invoice) {
+		this.invoice = invoice;
 	}
 
 }

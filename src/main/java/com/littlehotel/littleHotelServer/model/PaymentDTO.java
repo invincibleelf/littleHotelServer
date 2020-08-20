@@ -6,7 +6,7 @@ public class PaymentDTO extends BaseDTO {
 	
 	private String type;
 	
-	private Long payId;
+	private String payId;
 
 	public String getStatus() {
 		return status;
@@ -24,11 +24,11 @@ public class PaymentDTO extends BaseDTO {
 		this.type = type;
 	}
 
-	public Long getPayId() {
+	public String getPayId() {
 		return payId;
 	}
 
-	public void setPayId(Long payId) {
+	public void setPayId(String payId) {
 		this.payId = payId;
 	}
 	
