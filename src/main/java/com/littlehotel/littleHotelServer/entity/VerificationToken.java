@@ -4,18 +4,13 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
-public class VerificationToken {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+@Table(name = "verification_tokens")
+public class VerificationToken extends BaseEntity{
 
 	private String token;
 	
@@ -27,14 +22,6 @@ public class VerificationToken {
 	
 	public VerificationToken() {
 		
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getToken() {
@@ -60,9 +47,5 @@ public class VerificationToken {
 	public void setUser(ApplicationUser user) {
 		this.user = user;
 	}
-	
-	
-	
-	
 	
 }

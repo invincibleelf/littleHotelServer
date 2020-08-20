@@ -7,9 +7,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -17,11 +14,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "invoices")
-public class Invoice {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+public class Invoice extends BaseEntity {
 
 	@Column(nullable = false, precision = 10, scale = 2)
 	private BigDecimal amount;
@@ -32,8 +25,7 @@ public class Invoice {
 	@JoinColumn(name = "guest_id", referencedColumnName = "id")
 	private Guest guest;
 
-	@OneToOne(targetEntity = Reservation.class, cascade = CascadeType.ALL)
-	@JoinColumn(name = "reservation_id", referencedColumnName = "id")
+	@OneToOne(mappedBy = "invoice")
 	private Reservation reservation;
 
 	@OneToOne(targetEntity = Payment.class, cascade = CascadeType.ALL)
@@ -82,10 +74,6 @@ public class Invoice {
 
 	public void setPayment(Payment payment) {
 		this.payment = payment;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 }

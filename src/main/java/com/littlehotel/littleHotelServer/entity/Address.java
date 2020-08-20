@@ -3,19 +3,14 @@ package com.littlehotel.littleHotelServer.entity;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.littlehotel.littleHotelServer.constants.EnumCountry;
 import com.littlehotel.littleHotelServer.constants.EnumStates;
 
 @Entity
-public class Address {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+@Table(name = "addresses")
+public class Address extends BaseEntity {
 
 	private String address;
 
@@ -77,10 +72,6 @@ public class Address {
 
 	public void setPostcode(Integer postcode) {
 		this.postcode = postcode;
-	}
-
-	public Long getId() {
-		return id;
 	}
 	
 	

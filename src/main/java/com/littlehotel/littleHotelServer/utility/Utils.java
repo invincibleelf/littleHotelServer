@@ -223,12 +223,12 @@ public class Utils {
 		
 		ApplicationUserDTO userDTO = mapper.map(user, ApplicationUserDTO.class);
 		
-		//Get roles name and convert it to string
-		Set<String> roles = new HashSet<>();
-		user.getRoles().forEach((role )->{
-			roles.add(role.getName().name());
-		});
-		userDTO.setRoles(roles);
+//		//Get roles name and convert it to string
+//		Set<String> roles = new HashSet<>();
+//		user.getRoles().forEach((role )->{
+//			roles.add(role.getName().name());
+//		});
+//		userDTO.setRoles(roles);
 		return userDTO;
 	}
 	

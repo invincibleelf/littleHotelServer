@@ -1,22 +1,12 @@
 package com.littlehotel.littleHotelServer.model;
 
-public class PaymentDTO {
-
-	private Long id;
+public class PaymentDTO extends BaseDTO {
 	
 	private String status;
 	
 	private String type;
 	
-	private Long payId;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	private String payId;
 
 	public String getStatus() {
 		return status;
@@ -34,11 +24,11 @@ public class PaymentDTO {
 		this.type = type;
 	}
 
-	public Long getPayId() {
+	public String getPayId() {
 		return payId;
 	}
 
-	public void setPayId(Long payId) {
+	public void setPayId(String payId) {
 		this.payId = payId;
 	}
 	

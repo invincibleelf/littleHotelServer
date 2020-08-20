@@ -1,4 +1,4 @@
-package com.littlehotel.littleHotelServer.service.impl;
+package com.littlehotel.littleHotelServer.service;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -25,6 +25,7 @@ import com.littlehotel.littleHotelServer.constants.EnumRole;
 import com.littlehotel.littleHotelServer.entity.ApplicationRole;
 import com.littlehotel.littleHotelServer.entity.ApplicationUser;
 import com.littlehotel.littleHotelServer.entity.VerificationToken;
+import com.littlehotel.littleHotelServer.model.ApplicationRoleDTO;
 import com.littlehotel.littleHotelServer.model.ApplicationUserDTO;
 import com.littlehotel.littleHotelServer.repository.RoleRepository;
 import com.littlehotel.littleHotelServer.repository.UserRepository;
@@ -53,7 +54,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	private VerificationTokenRepository verificationTokenRepository;
 
 	@Autowired
-	private EmailServiceImpl emailService;
+	private EmailService emailService;
 
 	@Override
 	@Transactional
@@ -86,7 +87,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 		user.setStatus(EnumAppUserStatus.CREATED);
 
-		Set<String> userRoles = applicationUserDTO.getRoles();
+		Set<ApplicationRoleDTO> userRoles = applicationUserDTO.getRoles();
 		Set<ApplicationRole> roles = new HashSet<>();
 
 		if (userRoles == null) {
@@ -96,7 +97,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 		} else {
 			userRoles.forEach(role -> {
-				switch (role) {
+				switch (role.getName()) {
 				// TODO Add cases for other required roles
 
 				default:

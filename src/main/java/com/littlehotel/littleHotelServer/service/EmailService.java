@@ -1,4 +1,4 @@
-package com.littlehotel.littleHotelServer.service.impl;
+package com.littlehotel.littleHotelServer.service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import com.littlehotel.littleHotelServer.entity.ApplicationUser;
 
 @Component
-public class EmailServiceImpl {
+public class EmailService {
 
 	@Value("${spring.mail.username}")
 	private String serverEmail;
@@ -23,7 +23,7 @@ public class EmailServiceImpl {
 	@Value("${mail.verificationapi}")
 	private String verificationApiUrl;
 
-	private static final Logger logger = LogManager.getLogger(EmailServiceImpl.class);
+	private static final Logger logger = LogManager.getLogger(EmailService.class);
 
 	@Autowired
 	private JavaMailSender emailSender;

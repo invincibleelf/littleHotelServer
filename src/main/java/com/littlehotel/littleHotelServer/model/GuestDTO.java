@@ -6,9 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-public class GuestDTO {
-
-	private Long id;
+public class GuestDTO extends BaseDTO{
 
 	@NotBlank
 	private String firstname;
@@ -29,14 +27,6 @@ public class GuestDTO {
 	private AddressDTO address;
 
 	public GuestDTO() {
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getFirstname() {

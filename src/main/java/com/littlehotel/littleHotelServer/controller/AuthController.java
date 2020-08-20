@@ -28,8 +28,8 @@ import com.littlehotel.littleHotelServer.model.ApplicationUserDTO;
 import com.littlehotel.littleHotelServer.model.JWTRequest;
 import com.littlehotel.littleHotelServer.model.JWTResponse;
 import com.littlehotel.littleHotelServer.model.MessageResponse;
+import com.littlehotel.littleHotelServer.service.UserDetailsServiceImpl;
 import com.littlehotel.littleHotelServer.service.UserService;
-import com.littlehotel.littleHotelServer.service.impl.UserDetailsServiceImpl;
 
 /*
  * @author Sharad Shrestha

@@ -3,13 +3,11 @@ package com.littlehotel.littleHotelServer.entity;
 import java.time.LocalDate;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -21,12 +19,8 @@ import com.littlehotel.littleHotelServer.constants.EnumBookingStatus;
 
 @Entity
 @Table(name = "reservations")
-public class Reservation {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-
+public class Reservation extends BaseEntity{
+	
 	private LocalDate bookedDate = LocalDate.now();
 
 	private LocalDate dateFrom;
@@ -48,11 +42,12 @@ public class Reservation {
 	@JoinTable(name = "reservations_rooms", joinColumns = @JoinColumn(name = "reservation_id"), inverseJoinColumns = @JoinColumn(name = "room_id"))
 	private Set<Room> rooms;
 
-	@ManyToOne(targetEntity = Guest.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Guest.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "guest_id", referencedColumnName = "id")
 	private Guest guest;
 	
-	@OneToOne(mappedBy = "reservation")
+	@OneToOne(targetEntity = Invoice.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "invoice_id", referencedColumnName = "id")
 	private Invoice invoice;
 
 	public Reservation() {
@@ -137,10 +132,6 @@ public class Reservation {
 
 	public void setGuest(Guest guest) {
 		this.guest = guest;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 	public Invoice getInvoice() {

@@ -4,20 +4,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.littlehotel.littleHotelServer.constants.EnumPaymentStatus;
 import com.littlehotel.littleHotelServer.constants.EnumPaymentType;
 
 @Entity
-public class Payment {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+@Table(name = "payments")
+public class Payment extends BaseEntity {
 
 	@OneToOne(mappedBy = "payment")
 	private Invoice invoice;
@@ -62,10 +57,6 @@ public class Payment {
 
 	public void setPayId(String payId) {
 		this.payId = payId;
-	}
-
-	public Long getId() {
-		return id;
 	}
 	
 

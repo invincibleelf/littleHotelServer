@@ -7,18 +7,17 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-public class ApplicationUserDTO {
-	
-	private Long id;
+public class ApplicationUserDTO extends BaseDTO {
 
 	@Email
 	@NotEmpty
 	private String username;
 	
+	@NotEmpty
 	@Pattern(regexp = "^(?=.*[0-9])(?=.[a-z]).{6,32}")
 	private String password;
 	
-	private Set<String> roles;
+	private Set<ApplicationRoleDTO> roles;
 	
 	// TODO Add regex validation for mobile phone	
 	@NotNull
@@ -26,12 +25,8 @@ public class ApplicationUserDTO {
 	
 	private String status;
 	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+	public ApplicationUserDTO() {
+		
 	}
 
 	public String getUsername() {
@@ -50,11 +45,11 @@ public class ApplicationUserDTO {
 		this.password = password;
 	}
 
-	public Set<String> getRoles() {
+	public Set<ApplicationRoleDTO> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Set<String> roles) {
+	public void setRoles(Set<ApplicationRoleDTO> roles) {
 		this.roles = roles;
 	}
 

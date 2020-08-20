@@ -1,22 +1,14 @@
 package com.littlehotel.littleHotelServer.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,8 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.littlehotel.littleHotelServer.entity.Hotel;
 import com.littlehotel.littleHotelServer.model.HotelDTO;
 import com.littlehotel.littleHotelServer.model.MessageResponse;
-import com.littlehotel.littleHotelServer.service.impl.HotelServiceImpl;
-import com.littlehotel.littleHotelServer.utility.Utils;
+import com.littlehotel.littleHotelServer.service.HotelService;
 
 /**
  * API Controller to handle request related with hotel CRUD operations
@@ -35,48 +26,11 @@ import com.littlehotel.littleHotelServer.utility.Utils;
  *
  */
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/hotels")
 @Validated
-public class HotelController {
+public class HotelController extends GenericRestController<HotelService, HotelDTO, Hotel> {
 
 	private static final Logger logger = LogManager.getLogger(HotelController.class);
-
-	@Autowired
-	private HotelServiceImpl hotelService;
-
-	@Autowired
-	private ModelMapper mapper;
-
-	/**
-	 * API to retrieve list of all hotel informations
-	 * 
-	 * @return ResponseEntity
-	 */
-	@GetMapping(value = "/hotels")
-	public ResponseEntity<?> all() {
-		logger.info("Request to get list of hotels");
-
-		List<Hotel> hotels = hotelService.getAllHotels();
-		List<HotelDTO> hotelDTOs = Utils.convertHotelEntityListToHotelDTOList(hotels, mapper);
-
-		return ResponseEntity.ok().body(hotelDTOs);
-	}
-
-	/**
-	 * API to retrieve hotel information
-	 * 
-	 * @param id
-	 * @return ResponseEntity
-	 */
-	@GetMapping(value = "/hotels/{id}")
-	public ResponseEntity<?> get(@PathVariable("id") Long id) throws Exception {
-		logger.info("Request to get hotel with id " + id);
-
-		Hotel hotel = hotelService.getHotelById(id);
-		HotelDTO hotelDTO = Utils.convertHotelEntityToHotelDTO(hotel, mapper);
-
-		return ResponseEntity.ok().body(hotelDTO);
-	}
 
 	/**
 	 * API to create hotel by user with role ADMIN
@@ -84,17 +38,16 @@ public class HotelController {
 	 * @param hotelDTO
 	 * @param result
 	 * @return ResponseEntity
+	 * @throws Exception 
 	 * @see BindingResult
 	 */
-	@PostMapping(value = "/hotels", produces = "application/json")
+	@Override
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> create(@Valid @RequestBody HotelDTO hotelDTO) {
+	public ResponseEntity<?> create(@Valid @RequestBody HotelDTO hotelDTO) throws Exception {
 
 		logger.info("Request to create hotel ");
 
-		Hotel hotel = hotelService.createHotel(hotelDTO);
-
-		return ResponseEntity.ok().body(Utils.convertHotelEntityToHotelDTO(hotel, mapper));
+		return ResponseEntity.ok().body(service.create(hotelDTO));
 
 	}
 
@@ -105,16 +58,15 @@ public class HotelController {
 	 * @param hotelDTO
 	 * @param result
 	 * @return ResponseEntity
+	 * @throws Exception 
 	 * @see BindingResult
 	 */
-	@PutMapping(value = "/hotels/{id}")
+	@Override
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody HotelDTO hotelDTO) {
+	public ResponseEntity<?> update(@PathVariable("id") Long id, @Valid @RequestBody HotelDTO hotelDTO) throws Exception {
 		logger.info("Request to update hotel with id = " + id);
 
-		Hotel hotel = hotelService.updateHotel(id, hotelDTO);
-
-		return ResponseEntity.ok().body(Utils.convertHotelEntityToHotelDTO(hotel, mapper));
+		return ResponseEntity.ok().body(service.update(id, hotelDTO));
 	}
 
 	/**
@@ -123,11 +75,12 @@ public class HotelController {
 	 * @param id
 	 * @return ResponseEntity with MessageResponse
 	 */
-	@DeleteMapping(value = "/hotels/{id}")
+	@Override
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
 		logger.info("Request to delete hotel with id = " + id);
-		return ResponseEntity.ok().body(new MessageResponse("Delete method unimpleted"));
+		service.delete(id);
+		return ResponseEntity.ok().body(new MessageResponse("Delete method unimplemented"));
 
 	}
 }
