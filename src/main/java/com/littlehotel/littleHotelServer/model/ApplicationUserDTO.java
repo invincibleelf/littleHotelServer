@@ -12,8 +12,7 @@ public class ApplicationUserDTO extends BaseDTO {
 	@Email
 	@NotEmpty
 	private String username;
-	
-	@NotEmpty
+
 	@Pattern(regexp = "^(?=.*[0-9])(?=.[a-z]).{6,32}")
 	private String password;
 	

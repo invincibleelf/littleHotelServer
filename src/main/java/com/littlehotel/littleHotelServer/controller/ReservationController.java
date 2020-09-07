@@ -47,7 +47,7 @@ public class ReservationController extends GenericRestController<ReservationServ
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> all() {
 		logger.info("Request to retrieve all reservations");
-		return ResponseEntity.ok().body(super.all());
+		return super.all();
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class ReservationController extends GenericRestController<ReservationServ
 		
 		logger.info("Request to retrieve reservation by id = " + id);
 		
-		return ResponseEntity.ok().body(super.get(id));
+		return super.get(id);
 
 	}
 
